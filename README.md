@@ -2,7 +2,7 @@
 
 
 
-#### Module to infer the cell type using smFISH data with two channel of two different marker genes. All the usefull functions and the pipeline is in main_cluster_split
+#### Module to infer the cell type using smFISH data with two channels of two different marker genes. All the usefull functions and the pipeline is in main_cluster_split
 
 
 #### 1) create your conda from the file ENV.txt: 
