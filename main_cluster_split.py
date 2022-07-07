@@ -668,9 +668,6 @@ def main(list_folder, args):
 
                 #plt.show()
                 print("ok")
-
-                #plt.pause(0.5)
-                print("ok")
                 plt.close("all")
                 plt.pause(1)
                 del fig
@@ -702,7 +699,8 @@ if __name__ == '__main__':
 
 
     parser.add_argument( '--new_probe', type=str, nargs='+', action='append', default = [],
-                         help =" command to add new probes or change parameters of existing one to add it do  --new_probe p1 epsi overlapping  --new_probe p2 20 0.3 where  'epsi' is the parameter of the dbscan 'overlapping' is the percent of overlap to make a cell positive to a probe")
+                         help =" command to add new probes or change parameters of existing one to add it do  '--new_probe p1 epsi overlapping  --new_probe p2 20 0.3 ...' "
+                               "where  'epsi' is the parameter of the dbscan 'overlapping' is the percent of overlap to make a cell positive to a probe")
 
 
     parser.add_argument( '--manual_threshold_cy3', type=str, default = '{"02_NI1230_Lamp3-Cy5_Pdgfra-Cy3_04.tiff": 45}',
@@ -711,11 +709,11 @@ if __name__ == '__main__':
     e = datetime.datetime.now()
 
     parser.add_argument('-dns', "--dico_name_save", type=str,
-                        default="dico_080222",  #f"{e.day}_{e.month}_{e.hour}",
+                        default="dico_080222",
                         help='additional name in the save result')
 
 
-    ###cellpose arg
+    ###cellpose arg default param are for 3D
     parser.add_argument('-d', "--diameter", type=float, default=None, help='')
     parser.add_argument('-ft', "--flow_threshold", type=float, default=0.75, help='')
     parser.add_argument('-d3', "--do_3D", type=bool, default=False, help='')
@@ -732,17 +730,14 @@ if __name__ == '__main__':
     parser.add_argument("--save_plot", type=int, default=0, help=' do save plot')
 
 
-    # not used parser.add_argument("--clustering", type=int, default=0, help='')
-
     parser.add_argument("--scale", nargs='+' default=[300, 103, 103], help='')
 
-
-    parser.add_argument("--epsi_cluster_cy3", default="é", help='')
-    parser.add_argument("--epsi_cluster_cy5", default="e", help='')
+    parser.add_argument("--remove_overlaping_in_alphashape", type=int, default=0, help='')
+    parser.add_argument("--epsi_cluster_cy3", default="é", help='use if remove_overlaping_in_alphashape is True')
+    parser.add_argument("--epsi_cluster_cy5", default="e", help='use if remove_overlaping_in_alphashape is True')
 
 
     parser.add_argument("--remove_overlaping", type=int, default=1, help='')
-    parser.add_argument("--remove_overlaping_in_alphashape", type=int, default=0, help='')
 
     parser.add_argument("--epsi_alphashape_cy3", type=int, default=25, help='')
     parser.add_argument("--epsi_alphashape_cy5", type=int, default=25, help='')
