@@ -13,9 +13,25 @@ from scipy.spatial import Delaunay, distance
 from skimage.draw import polygon
 
 from spots.spot_detection import (cluster_over_nuclei_3D_convex_hull,
-                                  computer_optics_cluster, generate_grid)
+                                  computer_optics_cluster)
 
 
+def generate_grid(cluster_spots, nx=1040, ny=1388):
+    try:
+        alpha_shape = alphashape.alphashape(cluster_spots)
+        poly_verts = np.array(alpha_shape.exterior.coords).astype(int)
+        poly_verts = [[p[1], p[0]] for p in poly_verts]
+
+        x, y = np.meshgrid(np.arange(ny), np.arange(nx))
+        x, y = x.flatten(), y.flatten()
+        points = np.vstack((x, y)).T
+        path = mplPath.Path(poly_verts)
+        grid = path.contains_points(points)
+        grid = grid.reshape((nx, ny))
+        return grid
+    except Exception as e:
+        print(e)
+        return np.zeros([nx, ny])
 
 
 def erase_overlapping_spot(spots_568, spots_647,

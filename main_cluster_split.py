@@ -730,7 +730,7 @@ if __name__ == '__main__':
     parser.add_argument("--save_plot", type=int, default=0, help=' do save plot')
 
 
-    parser.add_argument("--scale", nargs='+' default=[300, 103, 103], help='')
+    parser.add_argument("--scale", nargs='+', default=[300, 103, 103], help='')
 
     parser.add_argument("--remove_overlaping_in_alphashape", type=int, default=0, help='')
     parser.add_argument("--epsi_cluster_cy3", default="é", help='use if remove_overlaping_in_alphashape is True')
