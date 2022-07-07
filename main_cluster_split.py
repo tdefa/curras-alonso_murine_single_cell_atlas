@@ -27,34 +27,30 @@ from tqdm import tqdm
 
 from spots.erase_overlapping_spot import (erase_overlapping_spot,
                                           erase_point_in_cluster_2Dalphashape)
-from spots.plot import mask_image_to_rgb
+from spots.plot import mask_image_to_rgb, mask_image_to_rgb2D_from_list_green_cy3_red_cy5_both_blue_grey, \
+    mask_image_to_rgb2D_from_list_orange_cy3_other_grey, mask_image_to_rgb2D_from_list_orange_cy5_other_grey
 from spots.post_processing import erase_solitary
 from spots.spot_detection import (
     cluster_over_nuclei_3D_convex_hull, computer_optics_cluster,
-    mask_image_to_rgb2D_from_list_green_cy3_red_cy5_both_blue_grey,
-    mask_image_to_rgb2D_from_list_orange_cy3_other_grey,
-    mask_image_to_rgb2D_from_list_orange_cy5_other_grey,
     spot_detection_for_clustering)
 from utils.czi_to_tiff import preprare_tiff
 
 warnings.filterwarnings("ignore")
 
-
-# %%    main
-
-
 def main(list_folder, args):
+
     dico_cy3 = json.loads(args.manual_threshold_cy3)
     dico_cy5 = json.loads(args.manual_threshold_cy5)
 
     print(f"manual threshold {dico_cy3} {dico_cy5} ")
 
+    ### default probe parameters
     dico_param_probes = {"Lamp3": (32, 0.42),
                          "Pdgfra": (35, 0.42),
                          "Chil3": (20, 0.55),
                          'Cap': (35, 0.30),
                          'aCap': (35, 0.30),
-                         'acap': (35, 0.30), #same but case diff
+                         'acap': (35, 0.30),
                          "Ptprb": (27, 0.45),
                          "Ptprb1": (27, 0.45),
                          "Fibin": (27, 0.40),
@@ -170,16 +166,11 @@ def main(list_folder, args):
 
         if args.classify:
             print("classify")
-            #if not os.path.exists(path_to_project_c + "plot_clustering_artifact_sup/"):
-            #    os.mkdir(path_to_project_c + "plot_clustering_artifact_sup/")
-
             try:
                 dico_stat = np.load(path_to_project_c + args.dico_name_save + '.npy', allow_pickle=True).item()
             except Exception as e:
                 print(e)
                 dico_stat = {}
-            #if not os.path.exists(path_to_project_c + "plot_clustering_artifact_sup/"):
-            #   os.mkdir(path_to_project_c + "plot_clustering_artifact_sup/")
             try:
                 dico_label_cluster = np.load(path_to_project_c + "dico_label_cluster" +  args.dico_name_save + '.npy',
                                              allow_pickle=True).item()
@@ -196,10 +187,6 @@ def main(list_folder, args):
                 print(nb_fileee)
                 print(time.time() - t)
                 print(f[:-5])
-                if  f == "09_NI_Ptprb-Cy3_Mki67-Cy5_02.tiff" or f == "06_IR5M_Lamp3-Cy3_Serpine1-Cy5_011.tiff":
-                    print(f + "maudit")
-                    continue
-
                 t = time.time()
 
                 args.epsi_cluster_cy3 = 'probe not reconize yet'
@@ -233,17 +220,18 @@ def main(list_folder, args):
                         else:
                             args.epsi_cluster_cy3 = dico_param_probes[probe_name][0]
                             args.overlapping_cy3 = dico_param_probes[probe_name][1]
+                if args.epsi_cluster_cy3 == 'probe not reconize yet':
+                    raise Exception(f" probe not reconize for the file {f} in Cy3, set the argument new_probe ")
+                if args.epsi_cluster_cy5 == 'probe not reconize yet':
+                    raise Exception(f" probe not reconize for the file {f} in Cy5, set the argument new_probe ")
                 assert args.epsi_cluster_cy3 != 'probe not reconize yet'
                 assert args.epsi_cluster_cy5 != 'probe not reconize yet'
                 ####
                 # load mask, remove solitary and load spot detection
                 ####
-                #if not os.path.exists(path_to_project_c + "plot_clustering_artifact_sup/" + f[:-5] + "/"):
-                #    os.mkdir(path_to_project_c + "plot_clustering_artifact_sup/" + f[:-5] + "/")
                 print(f)
                 img_dapi_mask = tifffile.imread(path_output_segmentaton + "dapi_maskdapi_" + f)
                 img_dapi_mask = erase_solitary(img_dapi_mask)
-                #img = tifffile.imread(path_to_dapi + "dapi_" + f)
 
                 spots_568 = np.load(path_to_czi_folder_c + "detected_spot_3d" +
                                     "/" + "AF568_" + f[:-5] + 'array.npy')
@@ -259,18 +247,25 @@ def main(list_folder, args):
                 if args.remove_overlaping:
                     new_spots_568, removed_spots_568, new_spots_647, removed_spots_647 = erase_overlapping_spot(
                         spots_568,
-                        spots_647, kk_568=args.kk_568,
-                        kk_647=args.kk_647)
+                        spots_647,
+                        kk_568=args.kk_568,
+                        kk_647=args.kk_647,
+                        scale = args.scale)
 
-                    spots_568 = erase_point_in_cluster_2Dalphashape(new_spots_568, removed_spots_568,
-                                                                    eps=args.epsi_alphashape_cy3,
-                                                                    min_samples=4, min_cluster_size=10, xi=0.05,
-                                                                    nx = img_dapi_mask.shape[1], ny = img_dapi_mask.shape[2])
-                    spots_647 = erase_point_in_cluster_2Dalphashape(new_spots_647, removed_spots_647,
-                                                                    eps=args.epsi_alphashape_cy5,
-                                                                    min_samples=4, min_cluster_size=10, xi=0.05,
-                                                                    nx = img_dapi_mask.shape[1], ny = img_dapi_mask.shape[2])
-                    spots_568, spots_647 = np.array(spots_568), np.array(spots_647)
+                    if args.remove_overlaping_in_alphashape:
+
+                        spots_568 = erase_point_in_cluster_2Dalphashape(new_spots_568, removed_spots_568,
+                                                                        eps=args.epsi_alphashape_cy3,
+                                                                        min_samples=4, min_cluster_size=10, xi=0.05,
+                                                                        nx = img_dapi_mask.shape[1], ny = img_dapi_mask.shape[2])
+                        spots_647 = erase_point_in_cluster_2Dalphashape(new_spots_647, removed_spots_647,
+                                                                        eps=args.epsi_alphashape_cy5,
+                                                                        min_samples=4, min_cluster_size=10, xi=0.05,
+                                                                        nx = img_dapi_mask.shape[1], ny = img_dapi_mask.shape[2])
+                        spots_568, spots_647 = np.array(spots_568), np.array(spots_647)
+                    else:
+                        spots_568, spots_647 = np.array(new_spots_568), np.array(new_spots_647)
+
                 ########
                 # compute clustered dbscan
                 #########
@@ -335,18 +330,13 @@ def main(list_folder, args):
         #############
         if args.save_plot:
 
-            print("plottinnggg")
+            print("plotting")
             nb_fileee = 0
             print(onlyfiles)
             print(onlyfiles)
             for f in onlyfiles:
-                #if f not in ["IR5M10Gy_1251_Lamp3Cy5_Rtkn2Cy3_01.tiff"]:
-                #    continue
                 plt.close("all")
                 nb_fileee += 1
-                if  f == "09_NI_Ptprb-Cy3_Mki67-Cy5_02.tiff" or f =="06_IR5M_Lamp3-Cy3_Serpine1-Cy5_011.tiff":
-                    print(f + "maudit")
-                    continue
                 print(f)
                 if not os.path.exists(path_to_save_fig):
                     os.mkdir(path_to_save_fig)
@@ -413,8 +403,6 @@ def main(list_folder, args):
                                                                                                      nuclei_647_1)
                 ax.imshow(m)
                 fig.savefig(path_to_save_fig + folder + "classif/orange_cy5" + f[:-5])
-
-
                 #####
                 # plot segmentation
                 #####
@@ -694,47 +682,7 @@ def main(list_folder, args):
 
 if __name__ == '__main__':
     list_folder = [
-    #"211207_10gy/",
-   #"211220_10gy_prolicence",
-
-       # "200709_Round1/",
-      #  "200710_Round2/"
-     #   "200828-NIvsIR5M/00_Capillary_EC/", #okd
-      #   "200828-NIvsIR5M/00_Large_Vessels/", #okd
-       "200828-NIvsIR5M/00_Macrophages/", #okd
-         "200908_CEC/", #okd
-        "200908_fibrosis/", #ok
-       "201030_fridyay/", #ok
-         "201127_AM_fibro/", #okd
-         "210205_Prolicence/aCap_prolif/", #okd
-        "210205_Prolicence/aCap_senes/", #okd
-         "210219_myo_fibros_y_macrophages/",#okd
-         "210412_repeat_fibro/IR5M/", #okd
-         "210412_repeat_fibro/NI/", #okd
-        "210413_rep2/", #okd
-        "210425_angiogenesis/", #ok
-         "210426_repeat3/", #ok
-         #"210428_IR5M1236_Lamp3-Cy5_Pdgfra-Cy3/"
-        #"01_lamp3-cy3_normal_01-czi_2021-10-25_1543/",
-         #"02_lamp3-cy3_normal-trueview_02-czi_2021-10-25_1544/",
-
-        #"210205_Prolicence/gCap prolif/",
-        #"210205_Prolicence/gCap senes/",
-        #"210205_Prolicence/aCap prolif/",
-        #"210205_Prolicence/aCap senes/",
-       # "220218_IR3M17gy/",
-       # "220304_IR3M17gy_prolicence/",
-        #"220317_IR3M10gy_2346_A/",
-        #"220317_IR3M10gy_2346_B/",
-        #"220318_IR3M10gy_2346_C/",
-        #"220324_IR3M17gy_2351_A/",
-        #"220325_IR3M17gy_2351_B/",
-        #"220422_IR3M10gy_2345_A/",
-        #"220425_IR3M10gy_2345_B/",
-        #"220429_fibro_gcap_A/",
-        #"220502_fibro_gcap_B/",
-
-
+        'test2/'
     ]
     list_folder.reverse()
     print("in the main")
@@ -746,7 +694,7 @@ if __name__ == '__main__':
 
     parser.add_argument('-ptz', "--path_to_czi_folder",
                         type=str,
-                        default="/media/tom/Elements1/to_take/",
+                        default="/media/tom/Elements1/to_take/test_pipeline/",
                         help='path to the folder containing the czi')
 
 
@@ -778,16 +726,23 @@ if __name__ == '__main__':
 
     ### task to do
     parser.add_argument('-prczi', "--prepare_czi", type=int, default=0, help='do : prepare_czi to tiff ')
-    parser.add_argument('-sg', "--segmentation", type=int, default=0, help='do segmentation ')
+    parser.add_argument('-sg', "--segmentation", type=int, default=1, help='do segmentation ')
     parser.add_argument("--spot_detection", type=int, default=0, help='do spots detection ')
     parser.add_argument("--classify", type=int, default=0, help='do classification / cell type mapping')
-    parser.add_argument("--save_plot", type=int, default=1, help=' do save plot')
+    parser.add_argument("--save_plot", type=int, default=0, help=' do save plot')
 
 
     # not used parser.add_argument("--clustering", type=int, default=0, help='')
 
+    parser.add_argument("--scale", nargs='+' default=[300, 103, 103], help='')
+
+
     parser.add_argument("--epsi_cluster_cy3", default="é", help='')
     parser.add_argument("--epsi_cluster_cy5", default="e", help='')
+
+
+    parser.add_argument("--remove_overlaping", type=int, default=1, help='')
+    parser.add_argument("--remove_overlaping_in_alphashape", type=int, default=0, help='')
 
     parser.add_argument("--epsi_alphashape_cy3", type=int, default=25, help='')
     parser.add_argument("--epsi_alphashape_cy5", type=int, default=25, help='')
@@ -795,7 +750,6 @@ if __name__ == '__main__':
     parser.add_argument("--overlapping_cy3", default="e", help='')
     parser.add_argument("--overlapping_cy5", default="e", help='')
 
-    parser.add_argument("--remove_overlaping", type=int, default=1, help='')
     parser.add_argument("--gpu", type=int, default=0, help='')
 
     parser.add_argument("--kk_568", type=int, default=3)

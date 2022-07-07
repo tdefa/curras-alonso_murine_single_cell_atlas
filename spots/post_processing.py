@@ -3,10 +3,17 @@
 
 import numpy as np
 
-def erase_solitary(mask): #mask en 3D
-    mask_bis = np.zeros(mask.shape)
 
-    ##traiter le cas ou n = 1
+def erase_solitary(mask): #mask en 3D
+    """
+    Erase nuclei  that are present in only one Z-slice
+    Args:
+        mask ():
+
+    Returns:
+
+    """
+    mask_bis = np.zeros(mask.shape)
     current_nuclei = set(np.unique(mask[0]))
     post_nuclei = set(np.unique(mask[1]))
     nuclei_to_remove =  current_nuclei - post_nuclei

@@ -11,10 +11,14 @@ python main_cluster_split.py --path_to_czi_folder /media/tom/Elements1/to_take/t
 
 ### generate the exels files for one cell type use the following command
 
-python compute_spatial_state --path_save /media/tom/Elements1/to_take/test_pipeline/exels/ --path_folder_of_folders /media/tom/Elements1/to_take/test_pipeline/ --list_folder test1 test2 --list_probes Lamp3 --list_probes 'Cap' 'aCap' 'CEC' 'acap' --dico_stat_name finaltest_for_hugo.npy
+python main_generate_excel_one_probe.py --path_save /media/tom/Elements1/to_take/test_pipeline/exels/ --path_folder_of_folders /media/tom/Elements1/to_take/test_pipeline/ --list_folder test1 test2 --list_probes Lamp3 --list_probes 'Cap' 'aCap' 'CEC' 'acap' --dico_stat_name finaltest_for_hugo.npy
 
 
-# Argument of the commend line 
+### generate the exels files for one cell type use the following command
+
+python main_generate_excel_two_probes.py --path_save /media/tom/Elements1/to_take/test_pipeline/exels_two_probes/ --path_folder_of_folders /media/tom/Elements1/to_take/test_pipeline/ --list_folder test1 test2 --list_probes1 Serpine1 --list_probes 'Cap' 'aCap' 'CEC' 'acap' --dico_stat_name finaltest_for_hugo.npy
+
+# Argument of the command line 
 
 optional arguments:
   -h, --help            show this help message and exit

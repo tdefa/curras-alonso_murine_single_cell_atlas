@@ -1,3 +1,7 @@
+
+
+
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -7,6 +11,10 @@ from scipy.stats import mannwhitneyu
 
 #%%
 
+
+#########################"
+# Function to plot figures for the statisitc of w
+######################""
 
 
 #%%
@@ -243,194 +251,3 @@ def plot_scatter(dico_qm, dico_color, dico_label,
     return #round(mean_NI, 4), round(median_NI, 4), round(mean_IR5M, 4), round(median_IR5M, 4), p
 
 
-#%%
-
-
-if __name__ == "__main__":
-
-    #%%
-
-    dico_color = {
-        "1225": '#1f77b4',
-        "1230": '#ff7f0e',
-        "2323": '#2ca02c',
-
-        "1251": '#207a93',
-        "1259": '#d645d5',
-        "1260": '#1b0d39',
-
-        "1236": '#d62728',
-        "1249": '#9467bd',
-        "1250": '#8c564b',
-        "2201": '#e377c2',
-        "2330": '#7f7f7f',
-    }
-
-    dico_label = {
-        "1225": "NI_1225",
-        "1230": 'NI_1230',
-        "2323": 'NI_2323',
-
-        "1251": '#IR5M_10gy_1251',
-        "1259": '#IR5M_10gy_1259',
-        "1260": '#IR5M_10gy_1260',
-
-        "1236": 'IR5M_17gy_1236',
-        "1249": 'IR5M_17gy_1249',
-        "1250": 'IR5M_17gy_1250',
-        "2201": 'IR5M_17gy_2201',
-        "2330": 'IR5M_17gy_2330',
-    }
-
-
-
-    ##one cell
-    path_to_exels = "/home/tom/Bureau/sandra050122/exels_all/one_cells/"
-    path_to_save = "/home/tom/Bureau/sandra050122/plot_all/nuclei_vol/"
-
-    list_probes = [ ['Lamp3'],  ['Pdgfra'] ,['Serpine1'], ['Ptprb'], ["Rtkn2"],
-                 ['Apln'], ['Chil3'],  ['Fibin'], ['C3ar1'],
-                 ['Hhip'], ['Mki67'], ['Pecam1'],  ['Cap', 'aCap', 'CEC'],]
-  #  list_probes =  [ ['Chil3']]
-    dico_cellname_probe = {
-        'Lamp3': "AT2",
-        'Pdgfra': "fibroblast",
-        "Serpine1": "scenescent",
-        'Ptprb': "vessel EC",
-        'Apln': "capillary EC with Alpn",
-        'Chil3': "AM",
-        "Fibin": "capillary EC with Fibin",
-        'C3ar1': "IM",
-        'Hhip': "myifibroblast",
-        'Mki67': "cycling cells",
-        'Pecam1': "EC",
-        'Cap': "capillary EC",
-        'aCap': "capillary EC",
-        'CEC': "capillary EC",
-        "Rtkn2": "AT1"
-    }
-
-    for prb in list_probes:
-
-        try:
-            dataframe_per_files = pd.read_excel(path_to_exels  + prb[0]+ ".xls")
-        except:
-            continue
-
-        if np.sum([type(i) == type(" ") for i in list(dataframe_per_files["image_name"])]) == 0:
-            continue
-
-
-
-
-        dico_qm = get_list_NI_IRM_by_animal(dataframe_per_files,
-                                NI_name=["1225", '1230', '2323'],
-                                  ir5m_name=['1236', '1249', '1250', '2330', "2201"],
-                                  gy10_name=["1251", "1259", "1260"],
-                                column_numerateur ='average_nuclei_size'# "average_point_cloud_size" #,
-                                )
-
-        if len([k  for k in dico_qm.keys() if len(np.concatenate(list(dico_qm[k].values()))) > 0]) == 0:
-            print(prb[0])
-            continue
-
-
-        plot_scatter(dico_qm, dico_color, dico_label,
-                         title= "average nuclei volume per sample %s (probe %s +)" % (dico_cellname_probe[prb[0]], prb[0]),
-                         axis_y_label="average nuclei volume in µm3",
-                         path_to_save = path_to_save  +dico_cellname_probe[prb[0]]+ "_"+ prb[0])
-
-
-#%%
-    ##one cell
-    path_to_exels = "/home/tom/Bureau/sandra050122/exels_all/one_cells/"
-    path_to_save = "/home/tom/Bureau/sandra050122/plot_all/point_cloud_vol/"
-
-    list_probes = [ ['Lamp3'],  ['Pdgfra'] ,['Serpine1'], ['Ptprb'], ["Rtkn2"],
-                 ['Apln'], ['Chil3'],  ['Fibin'], ['C3ar1'],
-                 ['Hhip'], ['Mki67'], ['Pecam1'],  ['Cap', 'aCap', 'CEC'],]
-  #  list_probes =  [ ['Chil3']]
-    dico_cellname_probe = {
-        'Lamp3': "AT2",
-        'Pdgfra': "fibroblast",
-        "Serpine1": "scenescent",
-        'Ptprb': "vessel EC",
-        'Apln': "capillary EC with Alpn",
-        'Chil3': "AM",
-        "Fibin": "capillary EC with Fibin",
-        'C3ar1': "IM",
-        'Hhip': "myifibroblast",
-        'Mki67': "cycling cells",
-        'Pecam1': "EC",
-        'Cap': "capillary EC",
-        'aCap': "capillary EC",
-        'CEC': "capillary EC",
-        "Rtkn2": "AT1"}
-
-    for prb in list_probes:
-
-        try:
-            dataframe_per_files = pd.read_excel(path_to_exels  + prb[0]+ ".xls")
-        except:
-            continue
-
-        if np.sum([type(i) == type(" ") for i in list(dataframe_per_files["image_name"])]) == 0:
-            continue
-
-
-
-
-        dico_qm = get_list_NI_IRM_by_animal(dataframe_per_files,
-                                NI_name=["1225", '1230', '2323'],
-                                  ir5m_name=['1236', '1249', '1250', '2330', "2201"],
-                                  gy10_name=["1251", "1259", "1260"],
-                                column_numerateur ="average_point_cloud_size" #'average_nuclei_size'# "average_point_cloud_size" #,
-                                )
-
-        if len([k  for k in dico_qm.keys() if len(np.concatenate(list(dico_qm[k].values()))) > 0]) == 0:
-            print(prb[0])
-            continue
-
-
-        plot_scatter(dico_qm, dico_color, dico_label,
-                         title= "average point cloud volume per sample %s (probe %s +)" % (dico_cellname_probe[prb[0]], prb[0]),
-                         axis_y_label="average point cloud volume in µm3",
-                         path_to_save = path_to_save  +dico_cellname_probe[prb[0]]+ "_"+ prb[0])
-
-
-
-
-#%% ### two cells
-    from pathlib import Path
-    import re
-    path_to_save = "/media/tom/Transcend/sandra050122/sandra03022022/plot_all/two_porbes_ppositive_proportion/"
-    path_to_exels = "/media/tom/Transcend/sandra050122/sandra03022022/exels_all/pair_cells/"
-    path_g = Path("/media/tom/Transcend/sandra050122/sandra03022022/exels_all/pair_cells/Pecam1_Ptprb.xls") # Path(path_to_exels)
-    for xxxx in path_g.glob("*.xls"):
-        xxxx = Path("/media/tom/Transcend/sandra050122/sandra03022022/exels_all/pair_cells/Pecam1_Apln.xls")
-        dataframe_per_files = pd.read_excel(str(xxxx))
-        probe1, probe2, _ = str(xxxx).replace('.', '_').split('/')[-1].split('_')
-        if np.sum([type(i) == type(" ") for i in list(dataframe_per_files["image_name"])]) == 0:
-            print(probe1)
-            print(probe2)
-            print()
-            #continue
-
-
-        dico_qm = get_list_NI_IRM_by_animal(dataframe_per_files, #column='percent_cell',
-                                column_numerateur="nb_positive_both",
-                                  NI_name=["1225", '1230', '2323'],
-                                 # ir5m_name=['1236', '1249', '1250', '2330', "2201"],
-                                            ir5m_name = ['1250'],
-                                  gy10_name=["1251", "1259", "1260"])
-
-        if len([k for k in dico_qm.keys() if len(np.concatenate(list(dico_qm[k].values()))) > 0]) == 0:
-            print(probe1)
-            print(probe2)
-            print()
-            #continue
-
-        plot_scatter(dico_qm, dico_color, dico_label,
-                         title= "percent of of (%s + & %s + )" % (probe1, probe2),
-                         axis_y_label="proportion percent",
-                         path_to_save = path_to_save  +probe1 + "_" + probe2)

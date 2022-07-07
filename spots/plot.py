@@ -1,36 +1,31 @@
 
 #%%
-import cv2
-import time
+import colorsys
 import os
+import sys
+import time
 from os import listdir
 from os.path import isfile, join
-import czifile as zis
-from matplotlib import pyplot as plt
-import tifffile
-import numpy as np
 
+import alphashape
+import cv2
+import czifile as zis
+import numpy as np
+import tifffile
+from matplotlib import pyplot as plt
+from matplotlib.patches import RegularPolygon
 from scipy import ndimage as ndi
 from skimage.segmentation import find_boundaries
 
-import sys
-import colorsys
-
-
-from matplotlib.patches import RegularPolygon
+from spots.post_processing import erase_small_nuclei, erase_solitary
 
 # -*- coding: utf-8 -*-
 
-from spots.post_processing import erase_solitary, erase_small_nuclei
 
 
 
 def mask_image_to_rgb(img, masks, colors = None):
-    """if colors is not None:
-        if colors.max()>1:
-            colors = np.float32(colors)
-            colors /= 255
-        colors = utils.rgb_to_hsv(colors)"""
+
     if img.ndim>2:
         img = img.astype(np.float32).mean(axis=-1)
     else:
@@ -78,131 +73,241 @@ def hsv_to_rgb(arr):
     return rgb
 
 
+def mask_image_to_rgb2D_from_list(img, masks, nuclei_af568, nuclei_af647, colors = None):
+    """
 
-def plot_nuclei_rna(img, masks, spots, dico_distance, radius = 3,colors = None, framesize=(15, 10), title = 'RNA binding'):
-        fig, ax = plt.subplots(1, 2, sharex='col', figsize=framesize)
-        fig.suptitle( title, fontsize=16)
-        nuclei = mask_image_to_rgb(img, masks, colors = None)
-        ax[0].imshow(nuclei)
-        ax[1].imshow(nuclei)
-        ax[0].set_title('DAPI + nuclei segmentation', fontdict = {'fontsize' : 24})
-        ax[1].set_title('nuclei segmentation + RNA detection', fontdict = {'fontsize' : 24})
+    Args:
+        img ():
+        masks ():
+        nuclei_af568 ():
+        nuclei_af647 ():
+        colors ():
 
-        for xyz in spots:
-            ##define color
-            color = nuclei[dico_distance[tuple(xyz)][1]][0] / 255
-            x = RegularPolygon((xyz[-1], xyz[-2]), 5, radius, color=color, linewidth=1, fill=True) #or usefct from from matplotlib.patches import RegularPolygon
-            ax[1].add_patch(x)
-        plt.show()
+    Returns:
 
-def plot_dapi_rna(img, masks, spots, dico_distance, radius = 3,colors = None, framesize=(15, 10), title = 'RNA binding'):
-        fig, ax = plt.subplots(1, 2, sharex='col', figsize=framesize)
-        fig.suptitle( title, fontsize=16)
-        nuclei = mask_image_to_rgb(img, masks, colors = None)
-        ax[0].imshow(img)
-        ax[1].imshow(nuclei)
-        ax[0].set_title('DAPI + nuclei segmentation', fontdict = {'fontsize' : 24})
-        ax[1].set_title('nuclei segmentation + RNA detection', fontdict = {'fontsize' : 24})
+    """
+    if colors is None:
+        colors = np.zeros((4,1))
+        colors[0,0] = 0.12 #orange
+        colors[1,0] = 0.52 #LIGHT BLUE
+        colors[2,0] = 0.33 #green
+        colors[3,0] = 0.85 #purple
+    positive_nuclei  = set(nuclei_af568 + nuclei_af647)
+    uncertain_nuclei = set(nuclei_af568) & set(nuclei_af647)
+    if img.ndim>2:
+        img = np.amax(img, 0).astype(np.float32)
+    else:
+        img = img.astype(np.float32)
+    img -= img.min()
+    img /= img.max()
+    HSV = np.zeros((img.shape[0], img.shape[1], 3), np.float32)
+    HSV[:,:,2] = np.clip(img*1.5, 0, 1.0)
+    green = 0
+    yellow = 0
+    purple = 0
+    blue = 0
 
-        for xyz in spots:
-            ##define color
-            color = nuclei[dico_distance[tuple(xyz)][1]][0] / 255
-            x = RegularPolygon((xyz[-1], xyz[-2]), 5, radius, color=color, linewidth=1, fill=True) #or usefct from from matplotlib.patches import RegularPolygon
-            ax[1].add_patch(x)
-        plt.show()
+    for n in np.unique(masks):
+        if n==0:
+            continue
+        ipix = (masks==n).nonzero()
+        if n not in positive_nuclei:
+            HSV[ipix[0],ipix[1],0] = colors[2,0]
+            green += 1
 
+        elif n in uncertain_nuclei:
+            HSV[ipix[0],ipix[1],0] = colors[3,0]
+            purple  += 1
+            HSV[ipix[0],ipix[1],1] = 1.0
+        elif n in nuclei_af568:
+            HSV[ipix[0],ipix[1],0] = colors[0,0]
+            yellow += 1
 
-
-
-def plot_smfish_rna(img_fish, img_dapi,  masks, spots, dico_distance, radius = 3,colors = None, framesize=(25, 10), title = 'RNA binding'):
-        fig, ax = plt.subplots(1, 2, sharex='col', figsize=framesize)
-        fig.suptitle( title, fontsize=24)
-        nuclei = mask_image_to_rgb(img_dapi, masks, colors = None)
-
-        #MIP of the fish
-        img_fish = np.amax(img_fish, 0)
-
-        ax[0].imshow(img_fish)
-        ax[1].imshow(img_fish)
-        ax[0].set_title('MIP smFISH', fontdict = {'fontsize' : 24})
-        ax[1].set_title('MIP smFISH + spot detection', fontdict = {'fontsize' : 24})
-
-        for xyz in spots:
-            ##define color
-            color = nuclei[dico_distance[tuple(xyz)][1]][0] / 255
-            x = RegularPolygon((xyz[-1], xyz[-2]), 5, radius, color=color, linewidth=1, fill=True) #or usefct from from matplotlib.patches import RegularPolygon
-            ax[1].add_patch(x)
-        plt.show()
-
-
-def plot_dapi_smfish_rna(img_fish, img_dapi,  masks, spots, dico_distance, radius = 3,colors = None, framesize=(25, 25), title = 'RNA binding'):
-        fig, ax = plt.subplots(2, 2, sharex='col', figsize=framesize)
-        fig.suptitle( title, fontsize=24)
-        nuclei = mask_image_to_rgb(img_dapi, masks, colors = None)
-
-        #MIP of the fish
-        img_fish = np.amax(img_fish, 0)
-
-        ax[0, 0].imshow(img_fish)
-        ax[0, 1].imshow(img_fish)
-        ax[0, 0].set_title('MIP smFISH', fontdict = {'fontsize' : 24})
-        ax[0, 1].set_title('MIP smFISH + RNA detection', fontdict = {'fontsize' : 24})
-        ax[1, 0].imshow(nuclei)
-        ax[1, 1].imshow(nuclei)
-        ax[1, 0].set_title('DAPI + nuclei segmentation', fontdict = {'fontsize' : 24})
-        ax[1, 1].set_title('nuclei segmentation + RNA detection', fontdict = {'fontsize' : 24})
-
-        for xyz in spots:
-            ##define color
-            color = nuclei[dico_distance[tuple(xyz)][1]][0] / 255
-            x = RegularPolygon((xyz[-1], xyz[-2]), 5, radius, color=color, linewidth=1, fill=True) #or usefct from from matplotlib.patches import RegularPolygon
-            ax[0,1].add_patch(x)
-            x = RegularPolygon((xyz[-1], xyz[-2]), 5, radius, color=color, linewidth=1, fill=True) #or usefct from from matplotlib.patches import RegularPolygon
-            ax[1,1].add_patch(x)
-
-        plt.show()
+        else : #it means that n is in nuclei_647
+            HSV[ipix[0],ipix[1],0] = colors[1,0]
+            blue += 1
+        HSV[ipix[0],ipix[1],1] = 1.0
 
 
+    HSV[:,:,2] = np.clip(img*1.5, 0, 1.0)
+    RGB = (hsv_to_rgb(HSV) * 255).astype(np.uint8) #
+    return RGB, green, yellow, blue, purple
 
 
+def mask_image_to_rgb2D_from_list_green_cy3_red_cy5_both_blue_grey(img, masks, nuclei_af568, nuclei_af647, colors = None):
+    """
+
+    Args:
+        img ():
+        masks ():
+        nuclei_af568 ():
+        nuclei_af647 ():
+        colors ():
+
+    Returns:
+
+    """
+    if colors is None:
+        colors = np.zeros((4,1))
+        colors[0,0] = 0.33 #green cy3
+        colors[1,0] = 0.01 # red cy5
+        colors[2,0] = 0.5 #grey
+        colors[3,0] = 0.6 #Blur
+    positive_nuclei  = set(nuclei_af568 + nuclei_af647)
+    uncertain_nuclei = set(nuclei_af568) & set(nuclei_af647)
+    if img.ndim>2:
+        img = np.amax(img, 0).astype(np.float32)
+    else:
+        img = img.astype(np.float32)
+    img -= img.min()
+    img /= img.max()
+    HSV = np.zeros((img.shape[0], img.shape[1], 3), np.float32)
+    HSV[:,:,2] = np.clip(img*1.5, 0, 1.0)
+    green = 0
+    yellow = 0
+    purple = 0
+    blue = 0
+
+    for n in np.unique(masks):
+        if n==0:
+            continue
+        ipix = (masks==n).nonzero()
+        if n not in positive_nuclei:
+            HSV[ipix[0],ipix[1],0] = colors[2,0]
+            green += 1
+            HSV[ipix[0],ipix[1],1] = 0.1
+            HSV[ipix[0],ipix[1],2] = np.clip(HSV[ipix[0],ipix[1],2] *1.5, 0, 1)
+
+        elif n in uncertain_nuclei:
+            HSV[ipix[0],ipix[1],0] = colors[3,0]
+            purple  += 1
+            HSV[ipix[0],ipix[1],1] = 0.9
+            #HSV[ipix[0],ipix[1],2] = 0.7
+
+        elif n in nuclei_af568:
+            HSV[ipix[0],ipix[1],0] = colors[0,0]
+            yellow += 1
+            HSV[ipix[0],ipix[1],1] = 1
+
+        else : #it means that n is in nuclei_647
+            HSV[ipix[0],ipix[1],0] = colors[1,0]
+            blue += 1
+            HSV[ipix[0],ipix[1],1] = 1
 
 
-#%%
-
-if __name__ == "__main__":
-
-    ###plot AF647
-    path_to_dapi = "/home/thomas/Bureau/phd/first_one/tiff_data/dapi/"
-    path_to_mask_dapi = "/home/thomas/Bureau/phd/first_one/tiff_data/predicted_mask_dapi_st04/"
-    path_to_af647 = "/home/thomas/Bureau/phd/first_one/tiff_data/af647/"
-    path_to_af568 = "/home/thomas/Bureau/phd/first_one/tiff_data/af568/"
+    RGB = (hsv_to_rgb(HSV) * 255).astype(np.uint8) #
+    return RGB, green, yellow, blue, purple #green norna, yellow cy3, purle #both  blue #cy5
 
 
-    onlyfiles = [f for f in listdir(path_to_mask_dapi) if isfile(join(path_to_mask_dapi, f)) and f[-1] == "f" ]
-    onlyfiles = [onlyfiles[i][14:] for i in range(len(onlyfiles))]
+def mask_image_to_rgb2D_from_list_orange_cy3_other_grey(img, masks, nuclei_af568, nuclei_af647, colors = None):
+    if color is None:
+        colors = np.zeros((4,1))
+        colors[0,0] = 0.12 #orange
+        colors[1,0] = 0.01 # red cy5
+        colors[2,0] = 0.5 #grey
+        colors[3,0] = 0.6 #Blur
 
-    for f in onlyfiles[:4]:
-        img = tifffile.imread(path_to_dapi +"dapi_"+ f)
-        img = np.amax(img, 0)
+    if img.ndim>2:
+        img = np.amax(img, 0).astype(np.float32)
+    else:
+        img = img.astype(np.float32)
+    img -= img.min()
+    img /= img.max()
+    HSV = np.zeros((img.shape[0], img.shape[1], 3), np.float32)
+    HSV[:,:,2] = np.clip(img*1.5, 0, 1.0)
+    green = 0
+    yellow = 0
+    purple = 0
+    blue = 0
 
-        slice_z = 18
-        nuclei = tifffile.imread(path_to_mask_dapi + "dapi_maskdapi_"+ f) # TODO clean path
-        erase_small_nuclei(erase_solitary(nuclei), 200)
-        img_fish = tifffile.imread(path_to_af647  + "AF647_"+ f) # TODO clean path
+    for n in np.unique(masks):
+        if n==0:
+            continue
+        ipix = (masks==n).nonzero()
+        if n not in nuclei_af568:
+            HSV[ipix[0],ipix[1],0] = colors[2,0]
+            green += 1
+            HSV[ipix[0],ipix[1],1] = 0.1
+            HSV[ipix[0],ipix[1],2] = np.clip(HSV[ipix[0],ipix[1],2] *1.5, 0, 1)
+        else :
+            HSV[ipix[0],ipix[1],0] = colors[0,0]
+            blue += 1
+            HSV[ipix[0],ipix[1],1] = 1
+    RGB = (hsv_to_rgb(HSV) * 255).astype(np.uint8) #
+    return RGB, green, yellow, blue, purple
 
-        dico_distance = np.load(path_to_af647 + "detected_spot_3d_st04/" + f[:-5] +".npy",allow_pickle='TRUE').item()
-        spots = dico_distance.keys()
-        #filter spots z
-        new_spots = []
-        for s in spots:
-            if s[0] == slice_z:
-                new_spots.append(s)
-        plot_nuclei_rna(img, masks = nuclei[slice_z], spots=new_spots, dico_distance=dico_distance, radius = 3,colors = None, framesize=(15, 10), title = f + " AF647")
+
+def mask_image_to_rgb2D_from_list_orange_cy5_other_grey(img, masks, nuclei_af568, nuclei_af647, colors = None):
+    if color is None
+        colors = np.zeros((4,1))
+        colors[0,0] = 0.12 #orange
+        colors[1,0] = 0.01 # red cy5
+        colors[2,0] = 0.5 #grey
+        colors[3,0] = 0.6 #Blur
+    if img.ndim>2:
+        img = np.amax(img, 0).astype(np.float32)
+    else:
+        img = img.astype(np.float32)
+    img -= img.min()
+    img /= img.max()
+    HSV = np.zeros((img.shape[0], img.shape[1], 3), np.float32)
+    HSV[:,:,2] = np.clip(img*1.5, 0, 1.0)
+    green = 0
+    yellow = 0
+    purple = 0
+    blue = 0
+
+    for n in np.unique(masks):
+        if n==0:
+            continue
+        ipix = (masks==n).nonzero()
+        if n not in nuclei_af647:
+            HSV[ipix[0],ipix[1],0] = colors[2,0]
+            green += 1
+            HSV[ipix[0],ipix[1],1] = 0.1
+            HSV[ipix[0],ipix[1],2] = np.clip(HSV[ipix[0],ipix[1],2] *1.5, 0, 1)
+
+        else : #it means that n is in nuclei_647
+            HSV[ipix[0],ipix[1],0] = colors[0,0]
+            blue += 1
+            HSV[ipix[0],ipix[1],1] = 1
+
+    RGB = (hsv_to_rgb(HSV) * 255).astype(np.uint8) #
+    return RGB, green, yellow, blue, purple
 
 
-        #%%
-        #plot_smfish_rna(img_fish, img_dapi = img,  masks = nuclei, spots  = spots, dico_distance=dico_distance, radius = 3,colors = None, framesize=(25, 10), title = f)
-        plot_nuclei_rna(img, masks = nuclei, spots=spots,
-                        dico_distance=dico_distance, radius = 3,colors = None,
-                        framesize=(15, 10), title = f + " AF647")
-        #plot_dapi_smfish_rna(img_fish,  img_dapi=img,  masks = nuclei, spots=spots, dico_distance=dico_distance, radius = 3,colors = None, framesize=(75, 75), title = f + " AF568")
+def cluster_over_nuclei_3D(labels, spots, masks, iou_threshold = 0.5, alpha = None):
+    positive_cell = []
+    nuc_unique = np.sort(np.unique(masks))
+    print(np.max(labels))
+    for cluster in range(np.max(labels)):
+        print(cluster )
+        cluster_spots = spots[labels == cluster]
+        print(len(cluster_spots))
+        if len(cluster_spots) <= 3:
+            continue
+        t = time.time()
+        try:
+            t = time.time()
+            print("alph")
+            alpha_shape = alphashape.alphashape(cluster_spots, alpha)
+            print(time.time() - t)
+        except Exception as e:
+            print(e)
+            continue
+        for cs in nuc_unique[1:]: #exclude zero
+            try:
+                t = time.time()
+
+                mask_single_cell = (masks == cs)
+
+                cell_coord = np.array(list(zip(*np.nonzero(mask_single_cell))))
+                p1 = np.sum(alpha_shape.contains(cell_coord))
+
+                overlap = p1 / len(cell_coord )
+                if overlap > iou_threshold:
+                    print((cluster, cs))
+                    positive_cell.append(cs)
+            except Exception as e:
+                    print(e)
+    return positive_cell

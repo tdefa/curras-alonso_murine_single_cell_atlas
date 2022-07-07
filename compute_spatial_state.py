@@ -2,90 +2,44 @@
 
 # -*- coding: utf-8 -*-
 #%%
-import time
-import pandas as pd
+########################################""
+# File with fonction to generate excel describing the spatial state of cell type
+##########################################
+
 import argparse
 import os
-import tifffile
-from spots.post_processing import erase_solitary
-
-import time
-
-
-from scipy import ndimage
-###########Function area
-#from tvtk.common import configure_input
-import numpy as np
-#from tvtk.api import tvtk
-#from tvtk.common import configure_input
-from scipy.spatial.distance import pdist, squareform
-from skimage.segmentation import watershed
-
-from scipy import ndimage as ndi#%%
-from numpy import random, nanmax, argmax, unravel_index
-from skimage.measure import find_contours
-from pathlib import Path
 import re
-
-
-#%%
-
-def get_dye(gene_smfish, key_cell_name): #should be move somewhere else
-    #print(key_cell_name)
-    #print(gene_smfish)
-    for gene in gene_smfish:
-        if gene+ "-Cy3" in key_cell_name:
-            return "Cy3"
-        if gene + "-Cy5" in key_cell_name:
-            return "Cy5"
-        if gene+ "Cy3" in key_cell_name:
-            return "Cy3"
-        if gene + "Cy5" in key_cell_name:
-            return "Cy5"
-        if gene in key_cell_name:
-            print('the dye is not written =  RISK OF ERROR')
-            a = re.search(f'{gene}', key_cell_name)
-
-            remaining_name = key_cell_name[a.end():]
-
-            a = re.search(f'{gene}', key_cell_name)
-            remaining_name = key_cell_name[a.end():]
-            dico_param_probes = {"Lamp3": (32, 0.42),
-                                 "Pdgfra": (35, 0.42),
-                                 "Chil3": (20, 0.55),
-                                 'Cap': (35, 0.30),
-                                 'aCap': (35, 0.30),
-                                 'acap': (35, 0.30),  # same but case diff
-                                 "Ptprb": (27, 0.45),
-                                 "Ptprb1": (27, 0.45),
-                                 "Fibin": (27, 0.40),
-                                 'C3ar1': (35, 0.45),
-                                 'Hhip': (35, 0.25),
-                                 'Mki67': (40, 0.30),
-                                 "Serpine1": (40, 0.50),
-                                 "Apln": (30, 0.40),
-                                 "Pecam1": (30, 0.40),
-                                 "CEC": (35, 0.30),
-                                 "Rtkn2": (27, 0.40),
-                                 }
-            ### if there are a probes after it means that gene is the first so it is Cy5
-            if any(word in remaining_name for word in list(dico_param_probes.keys())):
-                return "Cy5"
-            #### the second name is  Cy3
-            else:
-                return "Cy3"
-    print(key_cell_name)
-    print(gene_smfish)
-    raise Exception("Probe not detected")
+import time
+from pathlib import Path
+import numpy as np
+import pandas as pd
+import tifffile
+from numpy import argmax, nanmax, random, unravel_index
+from scipy import ndimage  # %%
+from scipy import ndimage as ndi
+from scipy.spatial.distance import pdist, squareform
+from skimage.measure import find_contours
+from skimage.segmentation import watershed
+from spots.post_processing import erase_solitary
+from utils.utils import get_dye
 
 
 
 def compute_contours(binary_mask_3D, scale_z = 300, scale_xy = 103):
     """
-    binary_mask_3D: 3D np array binary mask of one nucleus
-    scale in nanometre
+
     compute the boundaries coordianate of the nuclei
+    Parameters
+    ----------
+    binary_mask_3D: 3D np array binary mask of one nucleus scale in nanometre
+    scale_z
+    scale_xy
+
+    Returns
+    -------
+    np.array
     """
+
     if binary_mask_3D.ndim == 3:
         list_contour =  []
         z, x, y = np.nonzero(binary_mask_3D)
@@ -103,7 +57,19 @@ def compute_contours(binary_mask_3D, scale_z = 300, scale_xy = 103):
 
 
 def compute_shape_index_from_mask_nucleus(binary_mask_3D, scale_z = 300, scale_xy = 103):
-    """ compute the shpae index of one nucleus for a binary mask"""
+    """
+    compute the shape index of one nucleus for a binary mask
+    shape index  =  volume / ((4/3) *np.pi * ((largest diagonal/2)**3)) (add ref)
+    Parameters
+    ----------
+    binary_mask_3D
+    scale_z
+    scale_xy
+
+    Returns
+    -------
+
+    """
     scale_contours = compute_contours(binary_mask_3D,  scale_z,  scale_xy)
     D = pdist(scale_contours)
     D = squareform(D);
@@ -115,8 +81,6 @@ def compute_shape_index_from_mask_nucleus(binary_mask_3D, scale_z = 300, scale_x
 
 def compute_shape_index_sample(img_dapi_mask, positive_nuclei):
     """
-    
-
     Parameters
     ----------
     img_dapi_mask : TYPE
@@ -130,8 +94,6 @@ def compute_shape_index_sample(img_dapi_mask, positive_nuclei):
         shape index of the positive nuclei
 
     """
-
-
     total_shape_index = 0
     for nuc in positive_nuclei:
         shape_index, N, volume = compute_shape_index_from_mask_nucleus((img_dapi_mask==nuc).astype(int), 
@@ -142,6 +104,20 @@ def compute_shape_index_sample(img_dapi_mask, positive_nuclei):
 
 
 def compute_average_nuclei_size(img_dapi_mask, positive_nuclei, scale_z = 300, scale_xy = 103, in_micrometre = True):
+    """
+
+    Parameters
+    ----------
+    img_dapi_mask
+    positive_nuclei
+    scale_z
+    scale_xy
+    in_micrometre
+
+    Returns
+    -------
+
+    """
     total_volume = 0
     for nuc in positive_nuclei:
         total_volume += np.sum((img_dapi_mask == nuc).astype(np.int64)) *  np.int64(scale_z) *  np.int64(scale_xy) *  np.int64(scale_xy)
@@ -157,9 +133,20 @@ def get_experiment_name(sample_name):
 
 def count_positive_cell(dico_stat, key_cell_name, dye, exclude_impossible_solution = True):
     """
+
+    Parameters
+    ----------
+    dico_stat
+    key_cell_name
+    dye
     exclude_impossible_solution : parameter to not take into account nuclei that are positive to two incompatible cell type
-    dico_stat_value: list with len(np.unique(img_dapi_mask)), nb_no_rna, nb_cy3, nb_cy5, nb_both, 
-          positive_cluster_568, positive_cluster_647, negative_cluster_568, negative_cluster_647"""
+    dico_stat_value: list with len(np.unique(img_dapi_mask)), nb_no_rna, nb_cy3, nb_cy5, nb_both,
+          positive_cluster_568, positive_cluster_647, negative_cluster_568, negative_cluster_647
+    Returns
+    -------
+
+    """
+
     cell_cy3 = [c[3] for c in dico_stat[key_cell_name][5]] #all classifye wi
     cell_cy5 = [c[3] for c in dico_stat[key_cell_name][6]]
     print(type(key_cell_name))
@@ -198,9 +185,16 @@ def count_positive_cell(dico_stat, key_cell_name, dye, exclude_impossible_soluti
     
 
 def compute_average_size(l_d, nuclei = None):
+
     """
-    l_d : is the list of list (cluster number, overlapp, cluster volume, nuclei)
-    nuclei: lsit of int of positive nuclei
+        l_d :
+    nuclei:
+    Args:
+        l_d ():  is the list of list (cluster number, overlapp, cluster volume, nuclei)
+        nuclei (): list of int of positive nuclei
+
+    Returns:
+
     """
 
     if nuclei is not None and len(nuclei) == 0:
@@ -862,197 +856,3 @@ def generate_exels_cell_state_type(list_folder,
     return result 
 
 
-
-
-
-
-
-#%%
-
-
-
-
-if __name__ == '__main__':
-    #%% one cell
-    list_folder = [
-        #"211207_10gy/",
-        #"211220_10gy_prolicence/",
-
-       # "200709_Round1/",#no data
-        #"200710_Round2/" #no data
-       # "200828-NIvsIR5M/00_Capillary_EC/", #okd
-        #"200828-NIvsIR5M/00_Large_Vessels/", #okd
-        #"200828-NIvsIR5M/00_Macrophages/", #okd
-        #"200908_CEC/", #okd
-        #"200908_fibrosis/", #ok
-        #"201030_fridyay/", #ok
-        #"201127_AM_fibro/", #okd
-        #"210205_Prolicence/aCap_prolif/", #okd
-        #"210205_Prolicence/aCap_senes/", #okd
-        #"210219_myo_fibros_y_macrophages/",#okd
-        #"210412_repeat_fibro/IR5M/", #okd
-        #"210412_repeat_fibro/NI/", #okd
-        #"210413_rep2/", #okd
-        #"210425_angiogenesis/", #ok
-        #"210426_repeat3/", #ok
-        #"210428_IR5M1236_Lamp3-Cy5_Pdgfra-Cy3/",
-     #   "01_lamp3-cy3_normal_01-czi_2021-10-25_1543/",
-      #  "02_lamp3-cy3_normal-trueview_02-czi_2021-10-25_1544/",
-        #"210205_Prolicence/gCap prolif/", #dico_stat_02022022.npy
-        #"210205_Prolicence/gCap senes/", #dico_stat_2810.npy
-        #"210205_Prolicence/aCap prolif/",#dico_stat_2810.npy
-        #"210205_Prolicence/aCap senes/", #dico_stat_2810.npy
-        #"220218_IR3M17gy/",
-        #"220317_IR3M10gy_2346_A/",
-        #"220318_IR3M10gy_2346_C/",
-        #"220325_IR3M17gy_2351_B/",
-        #"220425_IR3M10gy_2345_B/",
-        #"220502_fibro_gcap_B/",
-        #"220304_IR3M17gy_prolicence/",
-        #"220317_IR3M10gy_2346_B/",
-        #"220324_IR3M17gy_2351_A/",
-        #"220422_IR3M10gy_2345_A/",
-        #"220429_fibro_gcap_A/",
-        #"220503_fibro_gcap_C/",
-        #"220505_fibro_gcap_D/",
-        #"220506_fibro_gcap_E/",
-        "test1/"
-    ]
-
-    parser = argparse.ArgumentParser(description='test')
-
-
-    parser.add_argument("--path_save",
-                        type=str,
-                        default="/media/tom/Elements1/to_take/test_pipeline/exels/",
-                        help='path to save the exels')
-
-    parser.add_argument("--path_folder_of_folders",
-                        type=str,
-                        default="/media/tom/Elements1/to_take/test_pipeline/",
-                        help='path to save the exels')
-
-
-    parser.add_argument("--list_folder", nargs="+", default=list_folder,  help=' list of folders in the czi folders to analyse') #
-
-
-    parser.add_argument('--list_probes', type=str, nargs='+', action='append', default=[ ['Lamp3'],  ['Pecam1'],  ['Ptprb'],['Hhip'], ["Rtkn2"],
-                 ['Apln'], ['Chil3'],  ['Fibin'], ['C3ar1'],
-                  ['Mki67'],  ['Cap', 'aCap', 'CEC', 'acap'],])
-
-    parser.add_argument("--dico_stat_name",
-                        type=str,
-                        default="finaltest_for_hugo.npy",
-                        help='path to save the exels')
-    parser.add_argument("--port", default=39949)
-    parser.add_argument("--mode", default='client')
-
-    args = parser.parse_args()
-    print(args)
-
-    for probes in args.list_probes:
-        generate_exels_one_cell(list_folder =args.list_folder,
-                            gene_smfish =probes,
-                            path_to_take = args.path_folder_of_folders,
-                            path_save = args.path_save,
-                            dico_stat_name = args.dico_stat_name,
-                            compute_nuclei_size = False,
-                            nuclei_shape_index = False,
-                            compute_neighbor = False)
-
-
-#%% pair
-
-    """
-    list_folder = [
-       # "220218_IR3M17gy/",
-        #"220317_IR3M10gy_2346_A/",
-        #"220318_IR3M10gy_2346_C/",
-        #"220325_IR3M17gy_2351_B/",
-        #"220425_IR3M10gy_2345_B/",
-        #"220502_fibro_gcap_B/",
-        #"220304_IR3M17gy_prolicence/",
-        #"220317_IR3M10gy_2346_B/",
-        #"220324_IR3M17gy_2351_A/",
-        #"220422_IR3M10gy_2345_A/",
-        #"220429_fibro_gcap_A/",
-        "220503_fibro_gcap_C/",
-        "220505_fibro_gcap_D/",
-        "220506_fibro_gcap_E/",
-
-    ]
-
-    path_to_take = "/media/tom/Transcend/image_lustra0605/Images_200522/"
-
-    list_probes = [ [['Cap', 'aCap', 'CEC',  'acap'], ['Mki67']],
-                    [['Cap', 'aCap', 'CEC',  'acap'], ['Serpine1']],
-
-                    [["Fibin"], ['Mki67']],
-                    [['Fibin'], ['Serpine1']],
-
-                    [["Apln"], ['Mki67']],
-                    [['Apln'], ['Serpine1']],
-
-                    [['Ptprb'], ['Mki67']],
-
-                    [['Ptprb'], ['Serpine1']],
-
-                    [['Pdgfra'], ['Hhip']],
-
-                    [['Pecam1'], ['Apln']],
-
-                    [['Pecam1'], ['Ptprb']],
-
-                    ]
-
-    path_save = "/media/tom/Transcend/image_lustra0605/Images_200522/two_probes/"
-
-    dico_stat = "finaldico_seg2205.npy"
-    for probes in list_probes:
-        list_param = [list_folder, probes[0],probes[1],  path_to_take, path_save, dico_stat]
-        generate_exels_cell_state_type(list_folder = list_folder,
-                                       gene_1 = probes[0],
-                                       gene_2 = probes[1],
-                                       path_to_take = path_to_take,
-                                       path_save = path_save,
-                                       dico_stat_name = dico_stat,
-                                       scale_z=300,
-                                       scale_xy=103,
-                                       compute_morpho_features=False)
-
-
-
-    #%%
-    list_folder = [
-           "211207_10gy/",
-          "211220_10gy_prolicence/",
-    ]
-
-    path_to_take = "/home/tom/Bureau/annotation/sandra050122/"
-
-    list_probes = [[['Cap', 'aCap', 'CEC'], ['Mki67']],
-                   [['Cap', 'aCap', 'CEC'], ['Serpine1']],
-
-                   [["Fibin"], ['Mki67']],
-                   [['Fibin'], ['Serpine1']],
-
-                   [["Apln"], ['Mki67']],
-                   [['Apln'], ['Serpine1']],
-
-                   [['Ptprb'], ['Mki67']],
-                   [['Ptprb'], ['Serpine1']],
-
-                   [['Pdgfra'], ['Hhip']],
-
-                   [['Pecam1'], ['Apln']],
-
-                   [['Pecam1'], ['Ptprb']],
-
-                   ]
-
-    path_save = "/home/tom/Bureau/annotation/sandra050122/exels_all/pair_cells/"
-    dico_stat = "dico_100122.npy"
-    for probes in list_probes:
-        list_param = [list_folder, probes[0], probes[1], path_to_take, path_save, dico_stat]
-        generate_exels_cell_state_type(list_param)
-    """

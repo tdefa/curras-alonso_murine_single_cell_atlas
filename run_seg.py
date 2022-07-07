@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+###########################"
+# Function to run the segementation with Cellpose
+############################
+
 from utils_ext.cellpose_utilis import stitch3D
 import os
 from os import listdir
