@@ -19,6 +19,7 @@ python main_cluster.py --path_to_czi_folder /media/tom/250822/czi_folder/ #[path
 
 ### 3) Generate the exel files showing the analysis results for each cell type with the following command
 
+Example: <br />
 python  main_generate_excel_one_probe.py \ <br />
 --path_save /media/tom/Elements1/to_take/test_pipeline/exels/ \ #[Path to the folder where the exels containing cell type calling results will be saved] <br />
 --path_folders_czi /media/tom/250822/czi_folder/  #[Path to the main folder containing all the experiment folders] \ <br />
@@ -30,8 +31,7 @@ python  main_generate_excel_one_probe.py \ <br />
 
 ### 4) Generate the exels files to compare size and proportion of two diffenrent cell type of your choice.
 
-<<<<<<< HEAD
-
+Example: <br />
 python  main_generate_excel_two_probe.py \ <br />
 --path_save /media/tom/Elements1/to_take/test_pipeline/exels/ \ #[Path to the folder where the exels containing cell type calling result will be saved] <br />
 --path_folders_czi /media/tom/250822/czi_folder/  #[Path to the  folder with all the experiment folder contiaing the czi file] \ <br />
