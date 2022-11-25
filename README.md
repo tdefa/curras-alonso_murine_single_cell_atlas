@@ -30,6 +30,7 @@ python  main_generate_excel_one_probe.py \ <br />
 
 ### 4) Generate the exels files to compare size and proportion of two diffenrent cell type of your choice.
 
+<<<<<<< HEAD
 
 python  main_generate_excel_two_probe.py \ <br />
 --path_save /media/tom/Elements1/to_take/test_pipeline/exels/ \ #[Path to the folder where the exels containing cell type calling result will be saved] <br />
@@ -41,5 +42,4 @@ python  main_generate_excel_two_probe.py \ <br />
 
 
 #### use python [name of the command] --help for a more extensive documentation
-
 
