@@ -675,11 +675,11 @@ def main(list_folder, args):
                 gc.collect()
 
 
-# %%
+#%%
 
 if __name__ == '__main__':
     list_folder = [
-        'test2/'
+        '201030_fridyay/'
     ]
     list_folder.reverse()
     print("in the main")
@@ -691,7 +691,7 @@ if __name__ == '__main__':
 
     parser.add_argument('-ptz', "--path_to_czi_folder",
                         type=str,
-                        default="/media/tom/Elements1/to_take/test_pipeline/",
+                        default="/media/tom/Elements1/to_take/",
                         help='path to the folder containing the czi')
 
 
@@ -724,31 +724,31 @@ if __name__ == '__main__':
 
     ### task to do
     parser.add_argument('-prczi', "--prepare_czi", type=int, default=0, help='do : prepare_czi to tiff ')
-    parser.add_argument('-sg', "--segmentation", type=int, default=1, help='do segmentation ')
+    parser.add_argument('-sg', "--segmentation", type=int, default=0, help='do segmentation ')
     parser.add_argument("--spot_detection", type=int, default=0, help='do spots detection ')
-    parser.add_argument("--classify", type=int, default=0, help='do classification / cell type mapping')
+    parser.add_argument("--classify", type=int, default=1, help='do classification / cell type mapping')
     parser.add_argument("--save_plot", type=int, default=0, help=' do save plot')
 
 
     parser.add_argument("--scale", nargs='+', default=[300, 103, 103], help='')
 
-    parser.add_argument("--remove_overlaping_in_alphashape", type=int, default=0, help='')
-    parser.add_argument("--epsi_cluster_cy3", default="é", help='use if remove_overlaping_in_alphashape is True')
-    parser.add_argument("--epsi_cluster_cy5", default="e", help='use if remove_overlaping_in_alphashape is True')
+    parser.add_argument("--remove_overlaping_in_alphashape", type=int, default=1, help='')
+    parser.add_argument("--epsi_cluster_cy3", default="é", help="value set in the code ")
+    parser.add_argument("--epsi_cluster_cy5", default="e", help="value set in the code ")
 
 
     parser.add_argument("--remove_overlaping", type=int, default=1, help='')
 
-    parser.add_argument("--epsi_alphashape_cy3", type=int, default=25, help='')
-    parser.add_argument("--epsi_alphashape_cy5", type=int, default=25, help='')
+    parser.add_argument("--epsi_alphashape_cy3", type=int, default=25, help='use if remove_overlaping_in_alphashape is True')
+    parser.add_argument("--epsi_alphashape_cy5", type=int, default=25, help='use if remove_overlaping_in_alphashape is True')
 
     parser.add_argument("--overlapping_cy3", default="e", help='')
     parser.add_argument("--overlapping_cy5", default="e", help='')
 
     parser.add_argument("--gpu", type=int, default=0, help='')
 
-    parser.add_argument("--kk_568", type=int, default=3)
-    parser.add_argument("--kk_647", type=int, default=3)
+    parser.add_argument("--kk_568", type=int, default=3,  help='In pixel size of the xy axis ')
+    parser.add_argument("--kk_647", type=int, default=3,  help='In pixel size of the xy axis ')
     parser.add_argument("--port", default=39949)
     parser.add_argument("--mode", default='client')
     args = parser.parse_args()
