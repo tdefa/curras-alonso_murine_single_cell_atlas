@@ -2,8 +2,8 @@
 
 
 
-#### Module to infer the cell type using smFISH data with two channels of two different marker genes. All the usefull functions and the pipeline is in main_cluster_split
-
+## Command line tool to infer the cell type using smFISH data with two channels of two different marker genes. 
+## this code is design specifically to analyse the images from **A murine single cell atlas of the lung response to radiation injury**, A.Curras-Alonso et al.
 
 #### 1) create your conda from the file ENV.txt: 
 conda list --explicit>ENV.txt
@@ -42,7 +42,7 @@ python  main_generate_excel_one_probe.py \ <br />
 --dico_stat_name finaldico_241122.npy \ #[Name of the dictionary storing cell type calling result from main_cluster.py] <br />
 
 
-### use python [name of the command] --help for a more extensive documentation
+#### use python [name of the command] --help for a more extensive documentation
 
 
 
