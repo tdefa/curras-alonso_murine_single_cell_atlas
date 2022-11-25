@@ -1,17 +1,25 @@
 # -*- coding: utf-8 -*-
 
-import os, warnings, time, tempfile, datetime, pathlib, shutil, subprocess
-from tqdm import tqdm
-from urllib.request import urlopen
-from urllib.parse import urlparse
-import cv2
-from scipy.ndimage import find_objects, gaussian_filter, generate_binary_structure, label, maximum_filter1d, binary_fill_holes
-from scipy.spatial import ConvexHull
-import numpy as np
 import colorsys
+import datetime
 import io
+import os
+import pathlib
+import shutil
+import subprocess
+import tempfile
+import time
+import warnings
+from urllib.parse import urlparse
+from urllib.request import urlopen
 
+import cv2
+import numpy as np
 from cellpose import metrics
+from scipy.ndimage import (binary_fill_holes, find_objects, gaussian_filter,
+                           generate_binary_structure, label, maximum_filter1d)
+from scipy.spatial import ConvexHull
+from tqdm import tqdm
 
 
 def rgb_to_hsv(arr):

@@ -1,26 +1,24 @@
-import cv2
-import time
+import colorsys
 import os
+import sys
+import time
 from os import listdir
 from os.path import isfile, join
+
+import cv2
 import czifile as zis
-from matplotlib import pyplot as plt
-import tifffile
-import numpy as np
-
-from scipy import ndimage as ndi
-from skimage.segmentation import find_boundaries
-
-import sys
-import colorsys
-
-from spots.post_processing import erase_solitary
-from matplotlib.patches import RegularPolygon
 import napari
-from skimage import data
 import networkx as nx
 import numpy as np
 import tifffile
+from matplotlib import pyplot as plt
+from matplotlib.patches import RegularPolygon
+from scipy import ndimage as ndi
+from skimage import data
+from skimage.segmentation import find_boundaries
+
+from spots.post_processing import erase_solitary
+
 
 #%%
 def mask_to_rgb(masks, colors = None):

@@ -5,16 +5,17 @@
 #https://github.com/balzer82/3D-OccupancyGrid-Python/blob/master/3D-AStar-PathPlanning.py
 # <codecell>
 
-import numpy as np
 import pickle
+
+import matplotlib.pyplot as plt
+import numpy as np
+from IPython.html import widgets
+from IPython.html.widgets import interact
+from matplotlib import cm
+from mpl_toolkits.mplot3d import Axes3D
 
 # <codecell>
 
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-from matplotlib import cm
-from IPython.html.widgets import interact
-from IPython.html import widgets
 
 # <codecell>
 

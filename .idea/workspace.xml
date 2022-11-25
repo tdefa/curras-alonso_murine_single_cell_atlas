@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a371ac7f-f164-45f3-b555-388c0b61bae3" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/compute_spatial_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/compute_spatial_state.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_cluster.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_cluster.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_generate_excel_one_probe.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_generate_excel_one_probe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_generate_excel_two_probes.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_generate_excel_two_probes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plot_cell_stat.py" beforeDir="false" afterPath="$PROJECT_DIR$/plot_cell_stat.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run_seg.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_seg.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/czi_to_tiff.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/czi_to_tiff.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/plots.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/plots.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils_ext/a_stars3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils_ext/a_stars3D.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils_ext/cellpose_utilis.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils_ext/cellpose_utilis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils_ext/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils_ext/utils.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FlaskConsoleOptions" custom-start-script="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))">
+    <envs>
+      <env key="FLASK_APP" value="app" />
+    </envs>
+    <option name="myCustomStartScript" value="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))" />
+    <option name="myEnvs">
+      <map>
+        <entry key="FLASK_APP" value="app" />
+      </map>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="1vr2rMHIJNNJltl0RCEfgQGNXHi" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "ToolWindowSciView.ShowToolbar": "false",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/home/tom/Bureau/phd/first_lustra/netxflow_code/code_clean",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "python.debugger.dataview.coloredbydefault": "false",
+    "settings.editor.selected.configurable": "Errors"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/utils" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/spots" />
+      <recent name="$PROJECT_DIR$/garbage" />
+      <recent name="$PROJECT_DIR$/special_plot_sandras_thesis" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.compute_spatial_state">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="code" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="compute_edge_statistic" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="code" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/compute_edge_statistic.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="compute_spatial_state" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="code" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/compute_spatial_state.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="image_cut_and_segmentation" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="code" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/stiching_pasteur" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/stiching_pasteur/image_cut_and_segmentation.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main_cluster_fig" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="code" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main_cluster_fig.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="script_generate_graph_old" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="code" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/script_generate_graph_old.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.compute_spatial_state" />
+        <item itemvalue="Python.image_cut_and_segmentation" />
+        <item itemvalue="Python.main_cluster_fig" />
+        <item itemvalue="Python.compute_edge_statistic" />
+        <item itemvalue="Python.script_generate_graph_old" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a371ac7f-f164-45f3-b555-388c0b61bae3" name="Default Changelist" comment="" />
+      <created>1627306086993</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1627306086993</updated>
+      <workItem from="1627306088611" duration="938000" />
+      <workItem from="1627307273272" duration="95000" />
+      <workItem from="1627307369480" duration="64355000" />
+      <workItem from="1627653211864" duration="4174000" />
+      <workItem from="1627735141253" duration="8890000" />
+      <workItem from="1627895378722" duration="19949000" />
+      <workItem from="1628086899695" duration="7827000" />
+      <workItem from="1629306764539" duration="67612000" />
+      <workItem from="1629833503975" duration="10043000" />
+      <workItem from="1629891463142" duration="43997000" />
+      <workItem from="1630320843551" duration="25980000" />
+      <workItem from="1630916405287" duration="24591000" />
+      <workItem from="1631189953380" duration="337000" />
+      <workItem from="1631190321261" duration="74000" />
+      <workItem from="1631190880795" duration="3486000" />
+      <workItem from="1631605088256" duration="2597000" />
+      <workItem from="1631802037648" duration="17257000" />
+      <workItem from="1632916238933" duration="29838000" />
+      <workItem from="1633368615005" duration="5903000" />
+      <workItem from="1633598610592" duration="343000" />
+      <workItem from="1633600780844" duration="5616000" />
+      <workItem from="1635149350040" duration="13722000" />
+      <workItem from="1635167049500" duration="5318000" />
+      <workItem from="1635250193732" duration="607000" />
+      <workItem from="1635343745497" duration="2711000" />
+      <workItem from="1635346559977" duration="28827000" />
+      <workItem from="1635444602573" duration="6282000" />
+      <workItem from="1635498614992" duration="5475000" />
+      <workItem from="1635510161853" duration="15908000" />
+      <workItem from="1635868500041" duration="4048000" />
+      <workItem from="1635873588769" duration="1359000" />
+      <workItem from="1635886909942" duration="1239000" />
+      <workItem from="1635927383290" duration="12552000" />
+      <workItem from="1636016844706" duration="11893000" />
+      <workItem from="1636102791413" duration="69459000" />
+      <workItem from="1636541594218" duration="38190000" />
+      <workItem from="1636965739380" duration="12808000" />
+      <workItem from="1636989851155" duration="1857000" />
+      <workItem from="1637231511514" duration="8051000" />
+      <workItem from="1637677371439" duration="9733000" />
+      <workItem from="1638465305411" duration="70000" />
+      <workItem from="1638876205051" duration="9307000" />
+      <workItem from="1638907215769" duration="6925000" />
+      <workItem from="1639327862478" duration="3774000" />
+      <workItem from="1639335472945" duration="599000" />
+      <workItem from="1641217164141" duration="32407000" />
+      <workItem from="1641468537561" duration="11204000" />
+      <workItem from="1641802170595" duration="45000" />
+      <workItem from="1641812864480" duration="2774000" />
+      <workItem from="1642080752288" duration="26869000" />
+      <workItem from="1642776820682" duration="17469000" />
+      <workItem from="1643805096920" duration="15172000" />
+      <workItem from="1643988402842" duration="4704000" />
+      <workItem from="1644313447952" duration="6351000" />
+      <workItem from="1644409429298" duration="35000" />
+      <workItem from="1644498241730" duration="13648000" />
+      <workItem from="1645002884270" duration="725000" />
+      <workItem from="1645030670667" duration="1239000" />
+      <workItem from="1646154352891" duration="10465000" />
+      <workItem from="1646306862041" duration="2634000" />
+      <workItem from="1646324386384" duration="902000" />
+      <workItem from="1647187135109" duration="14378000" />
+      <workItem from="1647203165340" duration="31439000" />
+      <workItem from="1647345052098" duration="5287000" />
+      <workItem from="1647416662909" duration="9446000" />
+      <workItem from="1647523043419" duration="4522000" />
+      <workItem from="1648142593762" duration="7152000" />
+      <workItem from="1648568199731" duration="13452000" />
+      <workItem from="1649084735568" duration="597000" />
+      <workItem from="1649146706451" duration="582000" />
+      <workItem from="1649197721234" duration="603000" />
+      <workItem from="1649264969084" duration="1038000" />
+      <workItem from="1649320906565" duration="1000" />
+      <workItem from="1649320920733" duration="514000" />
+      <workItem from="1651768807464" duration="705000" />
+      <workItem from="1651823086070" duration="13173000" />
+      <workItem from="1652028865722" duration="2249000" />
+      <workItem from="1652082809269" duration="1203000" />
+      <workItem from="1652116403855" duration="173000" />
+      <workItem from="1652345304368" duration="60000" />
+      <workItem from="1652442678730" duration="355000" />
+      <workItem from="1652630902037" duration="7137000" />
+      <workItem from="1652688168316" duration="14494000" />
+      <workItem from="1652869101290" duration="2868000" />
+      <workItem from="1653039017998" duration="9714000" />
+      <workItem from="1653822835912" duration="9000" />
+      <workItem from="1654866542298" duration="4985000" />
+      <workItem from="1655310419552" duration="882000" />
+      <workItem from="1655969650040" duration="14955000" />
+      <workItem from="1656577480198" duration="1217000" />
+      <workItem from="1656589681953" duration="6798000" />
+      <workItem from="1656663923058" duration="789000" />
+      <workItem from="1657115876497" duration="2389000" />
+      <workItem from="1657121972944" duration="10199000" />
+      <workItem from="1657207944347" duration="1479000" />
+      <workItem from="1657888641236" duration="4444000" />
+      <workItem from="1669292488378" duration="19983000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/main_cluster_fig.py</url>
+          <line>24</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/compute_spatial_state.py</url>
+          <line>294</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/stiching_pasteur/stiching_toolbox.py</url>
+          <line>408</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/main_cluster_split.py</url>
+          <line>35</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/stiching_pasteur/stiching_toolbox.py</url>
+          <line>577</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/stiching_pasteur/image_cut_and_segmentation.py</url>
+          <line>1</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/main_cluster_split.py</url>
+          <line>511</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/code$main_cluster_fig.coverage" NAME="main_cluster_fig Coverage Results" MODIFIED="1635980067437" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>

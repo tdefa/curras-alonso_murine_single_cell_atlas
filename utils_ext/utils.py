@@ -1,27 +1,23 @@
 # -*- coding: utf-8 -*-
 
 
-import cv2
-import numpy as np
-from PIL import Image
-
 import argparse
-
-import cv2
-import time
 import os
+import random
+import time
 from os import listdir
 from os.path import isfile, join
-import czifile as zis
-from matplotlib import pyplot as plt
-import tifffile
-import numpy as np
+from pathlib import Path
 
+import cv2
+import czifile as zis
+import numpy as np
+import tifffile
+from matplotlib import pyplot as plt
+from PIL import Image
 from scipy import ndimage as ndi
 from skimage.segmentation import find_boundaries
 from tqdm import tqdm
-import random
-from pathlib import Path
 
 
 def get_contours(nuclei, nucleus_nb, one_point= True):
