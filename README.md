@@ -1,23 +1,54 @@
 
 
+# Command line tool to infer cell types using smFISH data with two channels of two different marker genes.
 
+- This code is specifically designed to analyse the images from *A murine single cell atlas of the lung response to radiation injury*, A.Curras-Alonso et al.
 
-## Command line tool to infer cell types using smFISH data with two channels of two different marker genes. 
-## This code is specifically designed to analyse the images from *A murine single cell atlas of the lung response to radiation injury*, A.Curras-Alonso et al.
+## System requirements
 
-#### 1) Create your conda environment from the file ENV.txt: 
-conda list --explicit>ENV.txt
+- Tested on **Python 3.8** running on **Ubuntu 20.04** on a **Dell XPS-15**.
+- Images are stored in the czi format.
 
-#### 2) Execute the following command in the code directory to run the cell type mapping algorithm. Cell type mapping plots will be store in the "Figure" folder. Replace the parameters by your configuration.  run  python main_cluster.py --help for more information
-Example: <br />
-python main_cluster.py --path_to_czi_folder /media/tom/250822/czi_folder/ #[path to the folder containing folders of czi of the different experience] \
---list_folder experience1/ experience4/ \ #[names of folders in the main czi_folder containing the czi image files you want to analyse] <br />
---new_probe Pdgfratest 35 0.42 \ #[probe name, espi parameter in dbscan, minimal overlapping between marker gene and nucleus to make a nucleus positive to this marker] <br />
---new_probe Pdgfratest2 40 0.62 \ <br />
---dico_name_save analysis2022 #[key word use to name .npy files storing results of the analysis]  <br />
+## Installation guide
 
+1. We recommend using miniconda from [**here**](https://docs.conda.io/en/latest/miniconda.html)
+2. Create your conda environment and all required dependencies with the provided file `ENV.txt` (takes usually a few minutes): `conda list --explicit>ENV.txt`
 
-### 3) Generate the exel files showing the analysis results for each cell type with the following command
+## Demo
+
+demo.sh
+
+## Instructions for use
+
+### Runing the cell type mapping algorithm
+
+1. Execute the following command in the code directory
+2. Cell type mapping plots will be store in the "Figure" folder.
+3. Replace the parameters by your configuration.  
+4. run  `python main_cluster.py --help` for more information
+5. Results are saved in a .npy file dictionary
+
+**Example**:
+
+- Image names must contain the name of the gene that was imaged.
+- Code contains specific analysis parameters for each gene, e.g. the minimal distance for the dbscan.
+- For genes that don't contain hard-coded parameters an option allows to provide them as additional input (see below)
+
+``` bash
+python main_cluster.py --path_to_czi_folder /media/tom/250822/czi_folder/  
+--list_folder experiment1/ experiment4/
+--new_probe Pdgfratest 35 0.42
+--new_probe Pdgfratest2 40 0.62
+--dict_name_save analysis2022  
+```
+
+**Parameters**:
+- `--path_to_czi_folder`: path to the parental folder containing subfolders with czi images of different experiments
+- `--list_folder`: names of folders in the parental containing experiments to be anaylzed
+- `--new_probe`: permits to specify analysis parameters for genes that are not listed in the code: `espi` parameter in dbscan (minimal distance between points in a cluster), minimal overlapping between marker gene and nucleus to make a nucleus positive to this marker
+- `dict_name_save`: key word use to name .npy files storing results of the analysis
+
+## Generating Excel files with analysis results
 
 Example: <br />
 python  main_generate_excel_one_probe.py \ <br />
@@ -26,10 +57,11 @@ python  main_generate_excel_one_probe.py \ <br />
 --list_folder experience1/ experience4/ #[List of experiment folders to analyse in the czi main folder]
 --list_probes Lamp3 \ #[Probes to analyse, add space to separate probes that have many names] <br />
 --list_probes 'Cap' 'aCap' 'CEC' 'acap' \ #[Probes to analyse, add space to separate probes that have many names (like here)] <br />
---dico_stat_name finaldico_analysis2022.npy \ #[Name of the dictionary storing cell type calling results from main_cluster.py] <br />
+--dict_name_save finaldico_analysis2022.npy \ #[Name of the dictionary storing cell type calling results from main_cluster.py] <br />
 
 
-### 4) Generate the exels files to compare size and proportion of two diffenrent cell type of your choice.
+### Generateing Excel files to two cell types
+
 
 Example: <br />
 python  main_generate_excel_two_probe.py \ <br />
@@ -41,5 +73,7 @@ python  main_generate_excel_two_probe.py \ <br />
 --dico_stat_name finaldico_analysis2022.npy \ #[Name of the dictionary storing cell type calling result from main_cluster.py] <br />
 
 
-#### use python [name of the command] --help for a more extensive documentation
+#### Documentation
+
+use python [name of the command] --help for a more extensive documentation
 
