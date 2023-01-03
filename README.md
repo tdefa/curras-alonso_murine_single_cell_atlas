@@ -16,6 +16,8 @@
 
 ## Demo
 
+Download demo data on  : https://doi.org/10.5281/zenodo.7501932
+
 demo.sh
 
 ## Instructions for use
