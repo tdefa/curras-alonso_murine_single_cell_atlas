@@ -285,13 +285,13 @@ def main(args):
                 assert img_dapi_mask.ndim == 3
 
             np.save(path_to_project_c + "dico_label_cluster_final" + args.dico_name_save, dico_label_cluster)
-            np.save(path_to_project_c + "final" + args.dico_name_save, dico_stat)
+            np.save(path_to_project_c + args.dico_name_save, dico_stat)
 
             if not os.path.exists(path_save_res_classif):
                 os.mkdir(path_save_res_classif)
             np.save(path_save_res_classif + folder[:-2] + "dico_label_cluster_final" + args.dico_name_save,
                     dico_label_cluster)
-            np.save(path_save_res_classif + folder[:-2] + "final" + args.dico_name_save, dico_stat)
+            np.save(path_save_res_classif + folder[:-2]  + args.dico_name_save, dico_stat)
         #############
         # PLOTTING
         #############

@@ -4,20 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a371ac7f-f164-45f3-b555-388c0b61bae3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compute_spatial_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/compute_spatial_state.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_cluster.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_cluster.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_generate_excel_one_probe.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_generate_excel_one_probe.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_generate_excel_two_probes.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_generate_excel_two_probes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plot_cell_stat.py" beforeDir="false" afterPath="$PROJECT_DIR$/plot_cell_stat.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_seg.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_seg.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/czi_to_tiff.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/czi_to_tiff.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/plots.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/plots.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils_ext/a_stars3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils_ext/a_stars3D.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils_ext/cellpose_utilis.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils_ext/cellpose_utilis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils_ext/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils_ext/utils.py" afterDir="false" />
-    </list>
+    <list default="true" id="a371ac7f-f164-45f3-b555-388c0b61bae3" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -69,13 +56,15 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "ToolWindowSciView.ShowToolbar": "false",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/home/tom/Bureau/phd/first_lustra/netxflow_code/code_clean",
+    "last_opened_file_path": "/home/tom/Bureau/phd/first_lustra/netxflow_code/curras-alonso_murine_single_cell_atlas",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
     "python.debugger.dataview.coloredbydefault": "false",
-    "settings.editor.selected.configurable": "Errors"
+    "settings.editor.selected.configurable": "Errors",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -335,6 +324,7 @@
       <workItem from="1657207944347" duration="1479000" />
       <workItem from="1657888641236" duration="4444000" />
       <workItem from="1669292488378" duration="19983000" />
+      <workItem from="1672758373727" duration="297000" />
     </task>
     <servers />
   </component>
