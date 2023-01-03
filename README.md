@@ -50,27 +50,49 @@ python main_cluster.py --path_to_czi_folder /media/tom/250822/czi_folder/
 
 ## Generating Excel files with analysis results
 
-Example: <br />
-python  main_generate_excel_one_probe.py \ <br />
---path_save /media/tom/Elements1/to_take/test_pipeline/exels/ \ #[Path to the folder where the exels containing cell type calling results will be saved] <br />
---path_folders_czi /media/tom/250822/czi_folder/  #[Path to the main folder containing all the experiment folders] \ <br />
---list_folder experience1/ experience4/ #[List of experiment folders to analyse in the czi main folder]
---list_probes Lamp3 \ #[Probes to analyse, add space to separate probes that have many names] <br />
---list_probes 'Cap' 'aCap' 'CEC' 'acap' \ #[Probes to analyse, add space to separate probes that have many names (like here)] <br />
---dict_name_save finaldico_analysis2022.npy \ #[Name of the dictionary storing cell type calling results from main_cluster.py] <br />
+1. Execute the following commands in the code directory indicating the name of the .npy file dictionary where analysis results are saved <br />
+- The script main_generate_excel_one_probe.py will generate an exels file for each gene, containing for each image, the number of cell positive to this genes and the aproximative mean cytoplasm and nuclei size of positive cell . 
+
+- The script main_generate_excel_two_probe.py will generate an exels file for each pair of genes, containing for each image, the number of cell positive to the pair of genes and the aproximative mean cytoplasm and nuclei size of positive cell. 
+
+**Example**:
+```bash
+python  main_generate_excel_one_probe.py \ 
+--path_save /media/tom/Elements1/test_pipeline/exels/ \
+--path_folders_czi /media/tom/250822/czi_folder/   \
+--list_folder experience1/ experience4/ \
+--list_probes Lamp3 \ 
+--list_probes 'Cap' 'aCap' 'CEC' 'acap' \ 
+--dict_name_save analysis2022.npy \ 
+```
+
+**Parameters**:
+- `--path_to_czi_folder`: Path to the folder where the exels containing cell type calling results will be saved.
+- `--path_folders_czi`: Path to the parental folder containing subfolders with czi images of different experiments.
+- `--list_folder`: Names of folders in the parental containing experiments to be anaylzed.
+- `--list_probes`: Probes to analyse, add space to separate probes that have many names.
+- `--dict_name_sav`: Name of the .npy file dictionary storing cell type calling results from main_cluster.py
 
 
-### Generateing Excel files to two cell types
 
 
-Example: <br />
-python  main_generate_excel_two_probe.py \ <br />
---path_save /media/tom/Elements1/to_take/test_pipeline/exels/ \ #[Path to the folder where the exels containing cell type calling result will be saved] <br />
---path_folders_czi /media/tom/250822/czi_folder/  #[Path to the  folder with all the experiment folder contiaing the czi file] \ <br />
---list_folder experience1/ experience4/ #[List of folders to analyse in the czi main folder]
+**Example**:
+```bash
+python  main_generate_excel_two_probe.py \ 
+--path_save /media/tom/Elements1/test_pipeline/exels/ \ 
+--path_folders_czi /media/tom/250822/czi_folder/ 
+--list_folder experience1/ experience4/ 
 --list_probes1 Lamp3 \ #[First set of probes to analyse] <br />
 --list_probes2 'Cap' 'aCap' 'CEC' 'acap' \ #[second set of probes that will be compared the the first set, add space to separate probes that have many names (like here)]  <br />
---dico_stat_name finaldico_analysis2022.npy \ #[Name of the dictionary storing cell type calling result from main_cluster.py] <br />
+--dico_stat_name analysis2022.npy \ 
+
+
+```
+**Parameters**:
+Same than for  main_generate_excel_one_probe except than  `--list_probes` is replaced by:
+-`--list_probes1`: Name(s) of the first probe analyse
+-`--list_probes2`: Name(s) of the second probe to analyse 
+Then an excel will be generated with cell positive to both (probe1, probe2)
 
 
 #### Documentation
