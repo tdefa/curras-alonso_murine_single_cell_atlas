@@ -88,10 +88,11 @@ python  main_generate_excel_two_probe.py \
 
 
 ```
-**Parameters**:
-Same than for  main_generate_excel_one_probe except than  `--list_probes` is replaced by:
--`--list_probes1`: Name(s) of the first probe analyse
--`--list_probes2`: Name(s) of the second probe to analyse 
+**Parameters**:Same than for  main_generate_excel_one_probe except than  `--list_probes` is replaced by:
+
+- `--list_probes1`: Name(s) of the first probe to analyse
+- `--list_probes2`: Name(s) of the second probe to analyse 
+
 Then an excel will be generated with cell positive to both (probe1, probe2)
 
 
