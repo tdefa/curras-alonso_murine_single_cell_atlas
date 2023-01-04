@@ -12,7 +12,7 @@
 ## Installation guide
 
 1. We recommend using miniconda from [**here**](https://docs.conda.io/en/latest/miniconda.html)
-2. Create your conda environment and all required dependencies with the provided file `ENV.txt` (takes usually a few minutes): `conda list --explicit>ENV.txt`
+2. Create your conda environment and all required dependencies with the provided file `ENV.txt` (takes usually a few minutes): `conda env create -n ENVNAME --file ENV.yml`
 
 ## Demo
 
