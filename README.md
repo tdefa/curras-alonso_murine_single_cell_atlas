@@ -47,7 +47,9 @@ python main_cluster.py --path_to_czi_folder /media/tom/250822/czi_folder/
 **Parameters**:
 - `--path_to_czi_folder`: path to the parental folder containing subfolders with czi images of different experiments
 - `--list_folder`: names of folders in the parental containing experiments to be anaylzed
-- `--new_probe`: permits to specify analysis parameters for genes that are not listed in the code: `espi` parameter in dbscan (minimal distance between points in a cluster), minimal overlapping between marker gene and nucleus to make a nucleus positive to this marker
+- `--new_probe`: permits to specify analysis parameters for genes that are not listed in the code: `espi` parameter in dbscan (minimal distance between points in a cluster), minimal overlapping between marker gene and nucleus to make a nucleus positive to this marker <br />
+Probes name that have pre filled default values : pre filled 'Lamp3', 'Pdgfra', 'Chil3', 'Cap', 'aCap', 'acap', 'Ptprb', 'Ptprb1', 'Fibin', 'C3ar1', 'Hhip', 'Mki67', 'Serpine1', 'Apln', 'Pecam1', 'CEC', 'Rtkn2'
+
 - `dict_name_save`: key word use to name .npy files storing results of the analysis
 
 ## Generating Excel files with analysis results
@@ -60,10 +62,10 @@ python main_cluster.py --path_to_czi_folder /media/tom/250822/czi_folder/
 **Example**:
 ```bash
 python  main_generate_excel_one_probe.py \ 
---path_save /media/tom/Elements1/test_pipeline/exels/ \
+--path_save /media/tom/Elements1/test_pipeline/excel/ \
 --path_folders_czi /media/tom/250822/czi_folder/   \
 --list_folder experience1/ experience4/ \
---list_probes Lamp3 \ 
+--list_probes 'Lamp3' \ 
 --list_probes 'Cap' 'aCap' 'CEC' 'acap' \ 
 --dict_name_save analysis2022.npy \ 
 ```
@@ -80,13 +82,13 @@ python  main_generate_excel_one_probe.py \
 
 **Example**:
 ```bash
-python  main_generate_excel_two_probe.py \ 
---path_save /media/tom/Elements1/test_pipeline/exels/ \ 
---path_folders_czi /media/tom/250822/czi_folder/ 
---list_folder experience1/ experience4/ 
---list_probes1 Lamp3 \ #[First set of probes to analyse] <br />
---list_probes2 'Cap' 'aCap' 'CEC' 'acap' \ #[second set of probes that will be compared the the first set, add space to separate probes that have many names (like here)]  <br />
---dico_stat_name analysis2022.npy \ 
+python  main_generate_excel_two_probe.py \
+--path_save /media/tom/Elements1/test_pipeline/exels/ \
+--path_folders_czi /media/tom/250822/czi_folder/ \
+--list_folder experience1/ experience4/ \
+--list_probes1 'Lamp3' \
+--list_probes2 'Cap' 'aCap' 'CEC' 'acap' \
+--dico_stat_name analysis2022.npy \
 
 
 ```
