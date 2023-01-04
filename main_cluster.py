@@ -25,7 +25,7 @@ from tqdm import tqdm
 
 from run_seg import segment_nuclei
 from spots.erase_overlapping_spot import (erase_overlapping_spot,
-                                          erase_point_in_cluster_2Dalphashape)
+                                          )
 from spots.plot import (
     mask_image_to_rgb,
     mask_image_to_rgb2D_from_list_green_cy3_red_cy5_both_blue_grey,
@@ -130,9 +130,13 @@ def main(args):
         onlyfiles = [onlyfiles[i][14:] for i in range(len(onlyfiles))]
         assert len(onlyfiles) <= len([f for f in listdir(path_to_dapi) if isfile(join(path_to_dapi, f)) and f[-1] == "f"])
 
+
+
         ###########
         # Spot detection
         ###########
+
+
         if args.spot_detection:
             if not os.path.exists(path_to_project_c + "detected_spot_3d" + "/"):
                 os.mkdir(path_to_project_c + "detected_spot_3d" + "/")
@@ -161,12 +165,12 @@ def main(args):
         if args.classify:
             print("classify")
             try:  # load available result of available
-                dico_stat = np.load(path_to_project_c + args.dico_name_save + '.npy', allow_pickle=True).item()
+                dico_stat = np.load(path_to_project_c + args.dict_name_save + '.npy', allow_pickle=True).item()
             except Exception as e:
                 print(e)
                 dico_stat = {}
             try:  # load available result of available
-                dico_label_cluster = np.load(path_to_project_c + "dico_label_cluster" + args.dico_name_save + '.npy',
+                dico_label_cluster = np.load(path_to_project_c + "dico_label_cluster" + args.dict_name_save + '.npy',
                                              allow_pickle=True).item()
             except Exception as e:
                 print(e)
@@ -233,8 +237,8 @@ def main(args):
                     new_spots_568, removed_spots_568, new_spots_647, removed_spots_647 = erase_overlapping_spot(
                         spots_568,
                         spots_647,
-                        kk_568=args.kk_568,
-                        kk_647=args.kk_647,
+                        kk_568=args.kn_568,
+                        kk_647=args.kn_647,
                         scale=args.scale)
                     spots_568, spots_647 = np.array(new_spots_568), np.array(new_spots_647)
 
@@ -278,20 +282,20 @@ def main(args):
                                     positive_cluster_568, positive_cluster_647, negative_cluster_568,
                                     negative_cluster_647]
                     # save spot but  without the overlapping spots
-                    np.save(path_to_project_c + "dico_label_cluster" + args.dico_name_save, dico_label_cluster)
-                    np.save(path_to_project_c + args.dico_name_save, dico_stat)
+                    np.save(path_to_project_c + "dico_label_cluster" + args.dict_name_save, dico_label_cluster)
+                    np.save(path_to_project_c + args.dict_name_save, dico_stat)
 
                 dico_label_cluster[f] = [labels_568, labels_647, spots_568, spots_647]
                 assert img_dapi_mask.ndim == 3
 
-            np.save(path_to_project_c + "dico_label_cluster_final" + args.dico_name_save, dico_label_cluster)
-            np.save(path_to_project_c + args.dico_name_save, dico_stat)
+            np.save(path_to_project_c + "dico_label_cluster_final" + args.dict_name_save, dico_label_cluster)
+            np.save(path_to_project_c + args.dict_name_save, dico_stat)
 
             if not os.path.exists(path_save_res_classif):
                 os.mkdir(path_save_res_classif)
-            np.save(path_save_res_classif + folder[:-2] + "dico_label_cluster_final" + args.dico_name_save,
+            np.save(path_save_res_classif + folder[:-2] + "dico_label_cluster_final" + args.dict_name_save,
                     dico_label_cluster)
-            np.save(path_save_res_classif + folder[:-2]  + args.dico_name_save, dico_stat)
+            np.save(path_save_res_classif + folder[:-2]  + args.dict_name_save, dico_stat)
         #############
         # PLOTTING
         #############
@@ -310,10 +314,10 @@ def main(args):
                     if not os.path.exists(path_to_save_fig + path_to_create_plot):
                         os.mkdir(path_to_save_fig + path_to_create_plot)
                 # load analysis output
-                dico_label_cluster = np.load(path_to_project_c + "dico_label_cluster" + args.dico_name_save + ".npy",
+                dico_label_cluster = np.load(path_to_project_c + "dico_label_cluster_final" + args.dict_name_save + ".npy",
                                              allow_pickle=True).item()
                 [labels_568, labels_647, spots_568, spots_647] = dico_label_cluster[f]
-                dico_stat = np.load(path_to_project_c + args.dico_name_save + ".npy", allow_pickle=True).item()
+                dico_stat = np.load(path_to_project_c + args.dict_name_save + ".npy", allow_pickle=True).item()
                 [nb_nuclei, nb_no_rna, nb_cy3, nb_cy5, nb_both, positive_cluster_568, positive_cluster_647, negative_cluster_568, negative_cluster_647] = dico_stat[f]
                 nuclei_568_1 = [dico_stat[f][5][i][3] for i in range(len(dico_stat[f][5]))]
                 nuclei_647_1 = [dico_stat[f][6][i][3] for i in range(len(dico_stat[f][6]))]
@@ -634,7 +638,7 @@ if __name__ == '__main__':
     parser.add_argument('-ptz', "--path_to_czi_folder",
                         type=str,
                         default="/media/tom/250822/czi_folder/",
-                        help='path to the folder containing the czi')
+                        help='path to the parent folder containing the czi')
     parser.add_argument("--list_folder", nargs="+", default=['00_Macrophages/'],
                         help=' list of folders in the czi folders to analyse')
     parser.add_argument('--new_probe', type=str, nargs='+', action='append', default=[],
@@ -648,44 +652,49 @@ if __name__ == '__main__':
                         ' "01_IR5M1236_Lamp3-Cy5_Pdgfra-Cy5_04.tiff": 7} '
                         'to set manually the rna spot detection threshold of possible problematic Cy3 images')
     parser.add_argument('--manual_threshold_cy5', type=str,  default='{"02_NI1230_Lamp3-Cy5_Pdgfra-Cy3_08.tiff": 8,'
-                                                                     ' "01_IR5M1236_Lamp3-Cy5_Pdgfra-Cy5_04.tiff": 7}')
-    parser.add_argument('-dns', "--dico_name_save", type=str,
+                                                                     ' "01_IR5M1236_Lamp3-Cy5_Pdgfra-Cy5_04.tiff": 7}',
+                        help="same than manual_threshold_cy3")
+    parser.add_argument('-dns', "--dict_name_save", type=str,
                         default="dico_241122",
-                        help='additional name in the save result')
+                        help='key word use to name .npy files storing results of the analysis')
 
     # cellpose arg default param are for 3D
-    parser.add_argument('-d', "--diameter", type=float, default=None, help='')
-    parser.add_argument('-ft', "--flow_threshold", type=float, default=0.75, help='')
-    parser.add_argument('-d3', "--do_3D", type=bool, default=False, help='')
-    parser.add_argument('-m', "--mip", type=bool, default=False, help='')
-    parser.add_argument('-st', "--stitch_threshold", type=float, default=0.4, help='')
-    parser.add_argument('-er', "--erase_solitary", type=int, default=1, help='')
+    parser.add_argument('-d', "--diameter", type=float, default=None, help='cellpose parameter')
+    parser.add_argument('-ft', "--flow_threshold", type=float, default=0.75, help='cellpose parameter')
+    parser.add_argument('-d3', "--do_3D", type=bool, default=False, help='cellpose parameter')
+    parser.add_argument('-m', "--mip", type=bool, default=False, help='cellpose parameter')
+    parser.add_argument('-st', "--stitch_threshold", type=float, default=0.4, help='cellpose parameter')
+    parser.add_argument('-er', "--erase_solitary", type=int, default=1, help='erase too small nuclei')
 
     # task to do
-    parser.add_argument('-prczi', "--prepare_czi", type=int, default=1, help='do : prepare_czi to tiff ')
-    parser.add_argument('-sg', "--segmentation", type=int, default=1, help='do segmentation ')
-    parser.add_argument("--spot_detection", type=int, default=1, help='do spots detection ')
-    parser.add_argument("--classify", type=int, default=1, help='do classification / cell type mapping')
-    parser.add_argument("--save_plot", type=int, default=1, help=' do  plot')
+    parser.add_argument('-prczi', "--prepare_czi", type=int, default=1, help='if 1 do : prepare_czi to tiff ')
+    parser.add_argument('-sg', "--segmentation", type=int, default=1, help='if 1do segmentation ')
+    parser.add_argument("--spot_detection", type=int, default=1, help='if 1do spots detection ')
+    parser.add_argument("--classify", type=int, default=1, help='if 1do classification / cell type mapping')
+    parser.add_argument("--save_plot", type=int, default=1, help='if 1 do plot')
 
     # parameter for clustering and cell type calling
     parser.add_argument("--scale", nargs='+', default=[300, 103, 103], help='')
 
-    parser.add_argument("--remove_overlaping_in_alphashape", type=int, default=1, help='')
     parser.add_argument("--epsi_cluster_cy3", default="é", help="value set in the code if not a float")
     parser.add_argument("--epsi_cluster_cy5", default="e", help="value set in the code if not a float ")
     parser.add_argument("--remove_overlaping", type=int, default=1, help='')
     parser.add_argument("--overlapping_cy3", default="e", help='')
     parser.add_argument("--overlapping_cy5", default="e", help='')
     parser.add_argument("--gpu", type=int, default=1, help='')
-    parser.add_argument("--kk_568", type=int, default=3,  help='In pixel size of the xy axis ')
-    parser.add_argument("--kk_647", type=int, default=3,  help='In pixel size of the xy axis ')
-
+    parser.add_argument("--kn_568", type=int, default=3,  help='In pixel size of the xy axis ')
+    parser.add_argument("--kn_647", type=int, default=3,  help='In pixel size of the xy axis ')
     parser.add_argument("--port", default=39948)
     parser.add_argument("--mode", default='client')
     parser.add_argument("--host", default='127.0.0.2')
 
+
+
     args = parser.parse_args()
+
+    if args.path_to_czi_folder[-1] != "/":
+        args.path_to_czi_folder += "/"
+
     print(args)
     print()
     print(args.list_folder)
