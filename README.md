@@ -2,7 +2,7 @@
 
 # Command line tool to infer cell types using smFISH data with two channels of two different marker genes.
 
-- This code is specifically designed to analyse the images from *A murine single cell atlas of the lung response to radiation injury*, A.Curras-Alonso et al.
+- This code is specifically designed to analyse the images from *A murine single cell atlas of the lung response to radiation injury*, S.Curras-Alonso et al.
 
 ## System requirements
 
@@ -37,18 +37,18 @@ then run `./demo.sh`, modify path in demo.sh if needed
 - For genes that don't contain hard-coded parameters an option allows to provide them as additional input (see below)
 
 ``` bash
-python main_cluster.py --path_to_czi_folder /media/tom/250822/czi_folder/  
---list_folder experiment1/ experiment4/
---new_probe Pdgfratest 35 0.42
---new_probe Pdgfratest2 40 0.62
---dict_name_save analysis2022  
+python main_cluster.py --path_to_czi_folder /media/tom/250822/czi_folder/ \
+--list_folder experiment1/ experiment4/ \
+--new_probe Pdgfratest 35 0.42 \
+--new_probe Pdgfratest2 40 0.62 \
+--dict_name_save analysis2022 \
 ```
 
 **Parameters**:
 - `--path_to_czi_folder`: path to the parental folder containing subfolders with czi images of different experiments
 - `--list_folder`: names of folders in the parental containing experiments to be anaylzed
-- `--new_probe`: permits to specify analysis parameters for genes that are not listed in the code: `espi` parameter in dbscan (minimal distance between points in a cluster), minimal overlapping between marker gene and nucleus to make a nucleus positive to this marker <br />
-Probes name that have pre filled default values : pre filled 'Lamp3', 'Pdgfra', 'Chil3', 'Cap', 'aCap', 'acap', 'Ptprb', 'Ptprb1', 'Fibin', 'C3ar1', 'Hhip', 'Mki67', 'Serpine1', 'Apln', 'Pecam1', 'CEC', 'Rtkn2'
+- `--new_probe`: permits to specify analysis parameters for genes that are not listed in the code: name if the probe, `espi` parameter in dbscan (minimal distance between points in a cluster), minimal overlapping between marker gene and nucleus to make a nucleus positive to this marker <br />
+Probes that have pre filled default values : 'Lamp3', 'Pdgfra', 'Chil3', 'Cap', 'aCap', 'acap', 'Ptprb', 'Ptprb1', 'Fibin', 'C3ar1', 'Hhip', 'Mki67', 'Serpine1', 'Apln', 'Pecam1', 'CEC', 'Rtkn2'
 
 - `dict_name_save`: key word use to name .npy files storing results of the analysis
 
