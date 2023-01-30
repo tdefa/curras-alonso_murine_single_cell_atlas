@@ -59,5 +59,5 @@ def segment_nuclei(path_to_dapi, path_to_mask_dapi, dico_param, model, save=True
             plt.imshow(img)
             plt.show()
         if save:
-            tifffile.imwrite(path_to_mask_dapi + "dapi_mask" + f[:-4] + "tiff", data=masks, dtype=masks.dtype)
+            tifffile.imwrite(path_to_mask_dapi + "dapi_mask" +f.split('.')[0] + "tiff", data=masks, dtype=masks.dtype)
             np.save(path_to_mask_dapi + "dico_param.npy", dico_param)
